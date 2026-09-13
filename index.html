@@ -588,6 +588,10 @@
             overflow: hidden !important;
             background: #06090f !important;
         }
+        :fullscreen .lang-switch-container,
+        :-webkit-full-screen .lang-switch-container,
+        :-moz-full-screen .lang-switch-container,
+        :-ms-fullscreen .lang-switch-container,
         body.zen-mode .lang-switch-container,
         body.zen-mode header,
         body.zen-mode .preset-section,
@@ -640,7 +644,7 @@
 </head>
 <body>
 
-    <div class="lang-switch-container">
+    <div class="lang-switch-container" id="langSwitchContainer">
         <button class="lang-switch-btn" id="langSwitchBtn" onclick="toggleLanguage()">
             <span>🌐</span> <span id="langSwitchText">中文</span>
         </button>
@@ -1800,6 +1804,8 @@
 
         function enterZenFullscreen() {
             document.body.classList.add('zen-mode');
+            const langBox = document.getElementById('langSwitchContainer') || document.querySelector('.lang-switch-container');
+            if (langBox) langBox.style.setProperty('display', 'none', 'important');
             updateFullscreenBtnUI(true);
 
             // Try native HTML5 Fullscreen API with vendor prefixes
@@ -1819,6 +1825,8 @@
 
         function exitZenFullscreen() {
             document.body.classList.remove('zen-mode');
+            const langBox = document.getElementById('langSwitchContainer') || document.querySelector('.lang-switch-container');
+            if (langBox) langBox.style.removeProperty('display');
             updateFullscreenBtnUI(false);
 
             const doc = document;
@@ -1850,6 +1858,8 @@
                 if (!isNativeFs && document.body.classList.contains('zen-mode')) {
                     // Only exit zen-mode if exited natively
                     document.body.classList.remove('zen-mode');
+                    const langBox = document.getElementById('langSwitchContainer') || document.querySelector('.lang-switch-container');
+                    if (langBox) langBox.style.removeProperty('display');
                     updateFullscreenBtnUI(false);
                 }
             });
