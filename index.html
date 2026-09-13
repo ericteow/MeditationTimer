@@ -1,11 +1,11 @@
 <!DOCTYPE html>
-<html lang="zh-CN">
+<html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-    <title>禅修计时器 · Meditation Timer</title>
+    <title>Meditation Timer · 禅修计时器</title>
     <style>
         :root {
             --bg-deep: #080c13;
@@ -40,6 +40,36 @@
             padding: 24px 16px 60px;
             overflow-x: hidden;
             background-image: radial-gradient(circle at 50% 15%, rgba(212, 175, 55, 0.06) 0%, transparent 65%);
+        }
+
+        
+        /* LANGUAGE SWITCHER */
+        .lang-switch-container {
+            display: flex;
+            align-items: center;
+            justify-content: flex-end;
+            width: 100%;
+            max-width: 680px;
+            margin-bottom: 12px;
+        }
+        .lang-switch-btn {
+            background: rgba(24, 34, 50, 0.85);
+            border: 1px solid var(--border-subtle);
+            color: var(--text-gold);
+            padding: 6px 14px;
+            border-radius: 20px;
+            font-size: 0.85rem;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            backdrop-filter: blur(8px);
+        }
+        .lang-switch-btn:hover {
+            border-color: var(--gold-primary);
+            color: var(--gold-light);
+            background: #1e293b;
         }
 
         /* HEADER */
@@ -551,9 +581,15 @@
 </head>
 <body>
 
+    <div class="lang-switch-container">
+        <button class="lang-switch-btn" id="langSwitchBtn" onclick="toggleLanguage()">
+            <span>🌐</span> <span id="langSwitchText">中文</span>
+        </button>
+    </div>
+
     <header>
-        <h1>禅 修 计 时 器</h1>
-        <p class="sub-title">MEDITATION TIMER · 万籁俱寂 · 一念清净</p>
+        <h1 id="headerTitle">Meditation Timer</h1>
+        <p class="sub-title" id="headerSubtitle">MINDFULNESS & INNER PEACE · ALL IS SILENT</p>
     </header>
 
     <main class="app-container">
@@ -578,27 +614,27 @@
                     <div class="time-text" id="timeDisplay">15:00</div>
                     <div class="status-badge" id="statusBadge">
                         <span class="status-dot"></span>
-                        <span id="statusText">静待启修</span>
+                        <span id="statusText">Ready to Begin</span>
                     </div>
                 </div>
             </div>
 
             <!-- CONTROLS: START / PAUSE / RESET -->
             <div class="controls-row">
-                <button class="btn-secondary" id="resetBtn" title="重置计时">重 置</button>
+                <button class="btn-secondary" id="resetBtn" title="Reset Timer">Reset</button>
                 <button class="btn-primary" id="startBtn">
                     <span id="startBtnIcon">▶</span>
-                    <span id="startBtnText">开 始</span>
+                    <span id="startBtnText">Start</span>
                 </button>
-                <button class="btn-secondary" id="fullscreenBtn" title="全屏禅修模式">全 屏</button>
+                <button class="btn-secondary" id="fullscreenBtn" title="Zen Fullscreen Mode">Fullscreen</button>
             </div>
         </div>
 
         <!-- 2. PRESET TIMER BUTTONS -->
         <div class="preset-section">
             <div class="section-label">
-                <span>预设静坐时长 (PRESETS)</span>
-                <span id="currentPresetTip">当前: 15 分钟</span>
+                <span id="presetLabel">Meditation Duration (Presets)</span>
+                <span id="currentPresetTip">Current: 15 min</span>
             </div>
             <div class="preset-grid">
                 <button class="preset-btn active" data-minutes="15">
@@ -629,12 +665,12 @@
 
             <!-- Custom adjustments & Quick test -->
             <div class="custom-time-row">
-                <button class="custom-time-btn" onclick="adjustTime(-300)">- 5 分钟</button>
-                <button class="custom-time-btn" onclick="adjustTime(-60)">- 1 分钟</button>
-                <button class="custom-time-btn" onclick="adjustTime(60)">+ 1 分钟</button>
-                <button class="custom-time-btn" onclick="adjustTime(300)">+ 5 分钟</button>
-                <button class="custom-time-btn quick-test-badge" onclick="setExactSeconds(10)" title="测试时钟响铃">⚡ 测试 10 秒</button>
-                <button class="custom-time-btn quick-test-badge" onclick="setExactSeconds(60)" title="测试1分钟">⚡ 1 分钟</button>
+                <button class="custom-time-btn" id="adjMinus5" onclick="adjustTime(-300)">- 5 min</button>
+                <button class="custom-time-btn" id="adjMinus1" onclick="adjustTime(-60)">- 1 min</button>
+                <button class="custom-time-btn" id="adjPlus1" onclick="adjustTime(60)">+ 1 min</button>
+                <button class="custom-time-btn" id="adjPlus5" onclick="adjustTime(300)">+ 5 min</button>
+                <button class="custom-time-btn quick-test-badge" id="test10s" onclick="setExactSeconds(10)" title="Test Ending Bell">⚡ Test 10s</button>
+                <button class="custom-time-btn quick-test-badge" id="test1m" onclick="setExactSeconds(60)" title="Test 1 Minute">⚡ 1 min</button>
             </div>
         </div>
 
@@ -642,80 +678,39 @@
         <div class="settings-card">
             <div class="setting-row">
                 <div class="setting-label">
-                    <span>🔔 结束提示音 (出定之声)</span>
+                    <span id="endSoundLabel">🔔 Ending Bell (Conclusion)</span>
                 </div>
                 <div class="setting-controls">
                     <select class="sound-select" id="endSoundSelect">
-                        <optgroup label="🥣 大磬三击 (由轻至重 · 推荐出定)">
-                            <option value="sounds/daqing_3strikes_01_ancient_bronze.mp3" selected>禅林古铜大磬三声 (108Hz)</option>
-                            <option value="sounds/daqing_3strikes_02_pure_resonant.mp3">清修白铜玉磬三声 (216Hz)</option>
-                            <option value="sounds/daqing_3strikes_03_tibetan_om.mp3">藏密黑金颂钵三声 (136.1Hz OM)</option>
-                            <option value="sounds/daqing_3strikes_04_grounding_174.mp3">索尔菲吉奥174Hz安神大磬三声</option>
-                            <option value="sounds/daqing_3strikes_05_deep_pool.mp3">空灵深潭大磬三声 (120Hz)</option>
-                        </optgroup>
-                        <optgroup label="⚡ 引磬三击 (由轻至重 · 清越破空)">
-                            <option value="sounds/yinqing_3strikes_crescendo_classic.mp3">经典禅门引磬三击 (1080Hz)</option>
-                            <option value="sounds/yinqing_3strikes_crescendo_crisp.mp3">紧凑清越引磬三击 (1200Hz)</option>
-                            <option value="sounds/yinqing_3strikes_crescendo_warm.mp3">温润紫铜引磬三击 (852Hz)</option>
-                        </optgroup>
-                        <optgroup label="🥣 大磬 / 颂钵 单击">
-                            <option value="sounds/daqing_01_ancient_bronze.mp3">禅林古铜大磬 (108Hz 纯原声)</option>
-                            <option value="sounds/daqing_02_pure_resonant.mp3">清修白铜玉磬 (216Hz 澄明律)</option>
-                            <option value="sounds/daqing_03_tibetan_om.mp3">藏密黑金颂钵 (136.1Hz OM)</option>
-                            <option value="sounds/daqing_04_grounding_174.mp3">174Hz 安神大磬 (大地扎根)</option>
-                            <option value="sounds/daqing_05_dual_strike_layered.mp3">禅门双槌叠韵大磬 (立体回绕)</option>
-                        </optgroup>
-                        <optgroup label="🔔 引磬 单击">
-                            <option value="sounds/yinqing_01_classic_bronze.mp3">经典禅门引磬 (1080Hz)</option>
-                            <option value="sounds/yinqing_02_crystalline_high.mp3">破空晶莹高磬 (1728Hz 破昏沉)</option>
-                            <option value="sounds/yinqing_03_warm_soft.mp3">温润紫铜引磬 (852Hz 眉心轮)</option>
-                            <option value="sounds/yinqing_04_double_strike.mp3">禅堂仪轨连击磬 (叮~叮)</option>
-                            <option value="sounds/yinqing_05_harmonic_528.mp3">528Hz 空灵谐波磬</option>
-                        </optgroup>
-                        <optgroup label="🏛️ 东方大器之声">
-                            <option value="sounds/01_grand_temple_bell.mp3">东方晨钟 · 禅宗大钟 (96Hz)</option>
-                            <option value="sounds/03_deep_zen_gong.mp3">浩瀚深海 · 禅修巨锣 (70Hz)</option>
-                            <option value="sounds/04_healing_432hz_chime.mp3">432Hz 纯净引磬</option>
-                        </optgroup>
                     </select>
-                    <button class="icon-btn" id="previewSoundBtn" title="试听当前选中的声音">
-                        <span>▶</span> 试听
+                    <button class="icon-btn" id="previewSoundBtn" title="Preview Sound">
+                        <span>▶</span> <span class="preview-text">Preview</span>
                     </button>
                 </div>
             </div>
 
             <div class="setting-row">
                 <div class="setting-label">
-                    <span>🥢 起修提示音 (开始时敲击)</span>
+                    <span id="startSoundLabel">🥢 Starting Chime (Beginning)</span>
                 </div>
                 <div class="setting-controls">
                     <select class="sound-select" id="startSoundSelect">
-                        <option value="none" selected>无 (静默开始)</option>
-                        <option value="sounds/yinqing_01_classic_bronze.mp3">经典禅门引磬 (轻灵启程)</option>
-                        <option value="sounds/daqing_01_ancient_bronze.mp3">禅林古铜大磬 (庄严起坐)</option>
-                        <option value="sounds/yinqing_04_double_strike.mp3">仪轨双击磬 (开静止静)</option>
-                        <option value="sounds/01_grand_temple_bell.mp3">东方晨钟 (浑厚大钟)</option>
                     </select>
-                    <button class="icon-btn" id="previewStartSoundBtn" title="试听起修声音">
-                        <span>▶</span> 试听
+                    <button class="icon-btn" id="previewStartSoundBtn" title="Preview Sound">
+                        <span>▶</span> <span class="preview-text">Preview</span>
                     </button>
                 </div>
             </div>
 
             <div class="setting-row">
                 <div class="setting-label">
-                    <span>⏱️ 间歇提示音 (超过15分钟时)</span>
+                    <span id="intervalSoundLabel">⏱️ Interval Chime (>15 min)</span>
                 </div>
                 <div class="setting-controls">
                     <select class="sound-select" id="intervalSoundSelect">
-                        <option value="sounds/yinqing_01_classic_bronze.mp3" selected>每15分钟 · 经典引磬 (轻击一声)</option>
-                        <option value="sounds/yinqing_03_warm_soft.mp3">每15分钟 · 温润紫铜引磬 (柔和一声)</option>
-                        <option value="sounds/04_healing_432hz_chime.mp3">每15分钟 · 432Hz治愈引磬 (清澈一声)</option>
-                        <option value="sounds/daqing_02_pure_resonant.mp3">每15分钟 · 清修白铜玉磬 (澄明一声)</option>
-                        <option value="none">关闭间歇提示音</option>
                     </select>
-                    <button class="icon-btn" id="previewIntervalSoundBtn" title="试听间歇提示音">
-                        <span>▶</span> 试听
+                    <button class="icon-btn" id="previewIntervalSoundBtn" title="Preview Sound">
+                        <span>▶</span> <span class="preview-text">Preview</span>
                     </button>
                 </div>
             </div>
@@ -723,118 +718,29 @@
             <div class="toggles-row">
                 <label class="toggle-item">
                     <input type="checkbox" id="keepScreenOn" checked>
-                    <span>保持屏幕常亮 (防止息屏)</span>
+                    <span id="keepScreenLabel">Keep Screen Awake</span>
                 </label>
                 <label class="toggle-item">
                     <input type="checkbox" id="autoLoopSound">
-                    <span>出定声循环播放 (直到手动关闭)</span>
+                    <span id="autoLoopLabel">Loop Ending Sound</span>
                 </label>
             </div>
         </div>
 
         <!-- 4. SOUND VAULT BUTTON -->
         <button class="sound-vault-toggle" id="toggleVaultBtn">
-            <span>📚</span> 展开 / 收起 全部禅音品鉴库 (20+ 款原生音效)
+            <span>📚</span> <span id="toggleVaultText">Explore Acoustic Sound Vault (20+ Master Tracks)</span>
         </button>
 
         <!-- 5. COLLAPSIBLE SOUND VAULT -->
         <div class="vault-container" id="vaultContainer">
-            <!-- CATEGORY 1: 大磬三击 -->
-            <div>
-                <h3 class="vault-category-title">🥣 五种大磬三声 · 由轻至重 (小声到大声)</h3>
-                <div class="vault-grid">
-                    <div class="vault-card">
-                        <div>
-                            <div class="vault-name">1. 禅林古铜大磬三声 (108Hz)</div>
-                            <div class="vault-desc">0s轻 → 3s中 → 6.8s重。百八烦恼断除之数，重青铜古朴深稳，余波悠荡22s。</div>
-                        </div>
-                        <button class="vault-play-btn" onclick="playSpecificSound('sounds/daqing_3strikes_01_ancient_bronze.mp3')">▶ 试听 22s</button>
-                    </div>
-                    <div class="vault-card">
-                        <div>
-                            <div class="vault-name">2. 清修白铜玉磬三声 (216Hz)</div>
-                            <div class="vault-desc">致密高纯白铜，清润如玉，三层声浪层叠推涌，扫除心头烦乱杂念。</div>
-                        </div>
-                        <button class="vault-play-btn" onclick="playSpecificSound('sounds/daqing_3strikes_02_pure_resonant.mp3')">▶ 试听 20s</button>
-                    </div>
-                    <div class="vault-card">
-                        <div>
-                            <div class="vault-name">3. 藏密黑金颂钵三声 (136.1Hz OM)</div>
-                            <div class="vault-desc">经典 OM 宇宙频率，三推达到深层 Theta 脑波同步，波浪共振感极强。</div>
-                        </div>
-                        <button class="vault-play-btn" onclick="playSpecificSound('sounds/daqing_3strikes_03_tibetan_om.mp3')">▶ 试听 24s</button>
-                    </div>
-                    <div class="vault-card">
-                        <div>
-                            <div class="vault-name">4. 174Hz安神大磬三声 (大地扎根)</div>
-                            <div class="vault-desc">厚毡槌渐强推击，即使末声宏亮也毫无尖锐感，纯厚声波温柔包容。</div>
-                        </div>
-                        <button class="vault-play-btn" onclick="playSpecificSound('sounds/daqing_3strikes_04_grounding_174.mp3')">▶ 试听 22s</button>
-                    </div>
-                    <div class="vault-card">
-                        <div>
-                            <div class="vault-name">5. 空灵深潭大磬三声 (立体回绕)</div>
-                            <div class="vault-desc">三击左右声场微幅移动，营造如置身古刹深谷的空灵声场与立体驻波。</div>
-                        </div>
-                        <button class="vault-play-btn" onclick="playSpecificSound('sounds/daqing_3strikes_05_deep_pool.mp3')">▶ 试听 23s</button>
-                    </div>
-                </div>
-            </div>
-
-            <!-- CATEGORY 2: 引磬三击 -->
-            <div>
-                <h3 class="vault-category-title">⚡ 引磬三击 · 由轻至重 (经典禅门规矩)</h3>
-                <div class="vault-grid">
-                    <div class="vault-card">
-                        <div>
-                            <div class="vault-name">1. 经典禅门三击 (1080Hz)</div>
-                            <div class="vault-desc">正统寺院引磬起坐仪轨。微扣(30%) → 次扣(65%) → 重扣(100%)，庄严肃穆。</div>
-                        </div>
-                        <button class="vault-play-btn" onclick="playSpecificSound('sounds/yinqing_3strikes_crescendo_classic.mp3')">▶ 试听 16s</button>
-                    </div>
-                    <div class="vault-card">
-                        <div>
-                            <div class="vault-name">2. 紧凑清越三击 (1200Hz)</div>
-                            <div class="vault-desc">敲击间隔更紧凑明快，基音清澈破空，适合短时静坐或快速开静。</div>
-                        </div>
-                        <button class="vault-play-btn" onclick="playSpecificSound('sounds/yinqing_3strikes_crescendo_crisp.mp3')">▶ 试听 13s</button>
-                    </div>
-                    <div class="vault-card">
-                        <div>
-                            <div class="vault-name">3. 温润紫铜三击 (852Hz)</div>
-                            <div class="vault-desc">眉心轮柔和频率，起音圆润，由浅入深慢慢舒展，平复心绪不刺耳。</div>
-                        </div>
-                        <button class="vault-play-btn" onclick="playSpecificSound('sounds/yinqing_3strikes_crescendo_warm.mp3')">▶ 试听 16.5s</button>
-                    </div>
-                </div>
-            </div>
-
-            <!-- CATEGORY 3: 东方晨钟与巨锣 -->
-            <div>
-                <h3 class="vault-category-title">🏛️ 东方大器 · 大钟与巨锣</h3>
-                <div class="vault-grid">
-                    <div class="vault-card">
-                        <div>
-                            <div class="vault-name">1. 东方晨钟 · 禅宗大钟 (96Hz)</div>
-                            <div class="vault-desc">木槌击打青铜的低频冲击与宏大空间驻波，晨钟暮鼓，余韵达16秒。</div>
-                        </div>
-                        <button class="vault-play-btn" onclick="playSpecificSound('sounds/01_grand_temple_bell.mp3')">▶ 试听 16s</button>
-                    </div>
-                    <div class="vault-card">
-                        <div>
-                            <div class="vault-name">2. 浩瀚深海 · 禅修巨锣 (70Hz)</div>
-                            <div class="vault-desc">铜锣能量逐渐释放膨胀(Gong Wash)，如潮涌海浪，深邃摄心。</div>
-                        </div>
-                        <button class="vault-play-btn" onclick="playSpecificSound('sounds/03_deep_zen_gong.mp3')">▶ 试听 20s</button>
-                    </div>
-                </div>
-            </div>
+            <!-- Dynamic Vault Container rendered by JS -->
         </div>
 
     </main>
 
     <footer>
-        <p>禅修计时器 · 专业声学生成 · 48kHz 无损录音室母带品质</p>
+        <p id="footerText">Meditation Timer · Procedural Acoustic Synthesis · 48kHz Master Studio Quality</p>
     </footer>
 
     <!-- AUDIO ELEMENTS WITH MOBILE SUPPORT -->
@@ -844,6 +750,287 @@
     <audio id="silentAudioPlayer" loop preload="auto" playsinline webkit-playsinline src="sounds/silence.mp3"></audio>
 
     <script>
+        // --- INTERNATIONALIZATION (I18N) DICTIONARY ---
+        const I18N = {
+            en: {
+                langBtn: "中文",
+                title: "Meditation Timer",
+                subtitle: "MINDFULNESS & INNER PEACE · ALL IS SILENT",
+                pageTitle: "Meditation Timer · Mindfulness & Inner Peace",
+                runningTitle: (time) => `(${time}) Meditating · Meditation Timer`,
+                statusReady: "Ready to Begin",
+                statusRunning: "Mindful Stillness · Focus on Breath",
+                statusPaused: "Session Paused · Rest Gently",
+                statusInterval: (m) => `🔔 Mindful Bell · ${m} min elapsed`,
+                statusFinished: "✨ Session Complete · Mindful Conclusion",
+                startBtn: "Start",
+                pauseBtn: "Pause",
+                resumeBtn: "Resume",
+                resetBtn: "Reset",
+                fullscreenBtn: "Fullscreen",
+                exitFullscreenBtn: "Exit Fullscreen",
+                presetLabel: "Meditation Duration (Presets)",
+                presetCurrent: (m) => `Current: ${m} min`,
+                customCurrentSec: (s) => `Custom: ${s} sec`,
+                customCurrentMin: (m) => `Custom: ${m} min`,
+                testCurrentSec: (s) => `Test: ${s} sec`,
+                testCurrentMin: (m) => `Test: ${m} min`,
+                adjMinus5: "- 5 min",
+                adjMinus1: "- 1 min",
+                adjPlus1: "+ 1 min",
+                adjPlus5: "+ 5 min",
+                test10s: "⚡ Test 10s",
+                test1m: "⚡ 1 min",
+                test10sTitle: "Test Ending Bell",
+                test1mTitle: "Test 1 Minute",
+                endSoundLabel: "🔔 Ending Bell (Conclusion)",
+                startSoundLabel: "🥢 Starting Chime (Beginning)",
+                intervalSoundLabel: "⏱️ Interval Chime (>15 min)",
+                previewBtn: "Preview",
+                stopBtn: "Stop",
+                keepScreenLabel: "Keep Screen Awake",
+                autoLoopLabel: "Loop Ending Sound",
+                toggleVaultExpand: "📚 Explore Acoustic Sound Vault (20+ Master Tracks)",
+                toggleVaultCollapse: "📚 Collapse Acoustic Sound Vault",
+                footerText: "Meditation Timer · Procedural Acoustic Synthesis · 48kHz Master Studio Quality",
+                mediaTitle: "Meditating · Mindfulness Session",
+                mediaArtist: "Mindfulness & Inner Peace",
+                mediaAlbum: "Meditation Timer",
+                alertSilentStart: "Current selection is 'Silent Start'. Choose a bell or chime to preview.",
+                alertNoInterval: "Interval chime is disabled. Choose a chime to preview.",
+                fullscreenError: (msg) => `Unable to enter fullscreen: ${msg}`,
+                vaultCategories: [
+                    {
+                        title: "🥣 Daqing 3-Strike Crescendos (Soft → Med → Loud · Ending)",
+                        items: [
+                            { name: "1. Ancient Bronze Daqing 3 Strikes (108Hz)", desc: "0s soft → 3s med → 6.8s resonant. Sacred 108 count, deep temple bronze with 22s lingering resonance.", duration: "22s", src: "sounds/daqing_3strikes_01_ancient_bronze.mp3" },
+                            { name: "2. Pure White Bronze Jade Sound 3 Strikes (216Hz)", desc: "High-purity white bronze, crystal clear timbre, clearing mental chatter and fog.", duration: "20s", src: "sounds/daqing_3strikes_02_pure_resonant.mp3" },
+                            { name: "3. Tibetan Black Gold Singing Bowl 3 Strikes (136.1Hz OM)", desc: "Universal OM frequency, 3 phased waves inducing deep Theta brainwave coherence.", duration: "24s", src: "sounds/daqing_3strikes_03_tibetan_om.mp3" },
+                            { name: "4. Grounding 174Hz Solfeggio Daqing 3 Strikes", desc: "Thick felt mallet strike, gentle and profound grounding acoustics with zero harshness.", duration: "22s", src: "sounds/daqing_3strikes_04_grounding_174.mp3" },
+                            { name: "5. Deep Valley Inharmonic Bowl 3 Strikes (120Hz)", desc: "Spacious stereophonic movement creating ancient sanctuary mountain resonance.", duration: "23s", src: "sounds/daqing_3strikes_05_deep_pool.mp3" }
+                        ]
+                    },
+                    {
+                        title: "⚡ Yinqing 3-Strike Crescendos (Classic Zen Rules)",
+                        items: [
+                            { name: "1. Traditional Zen Temple Yinqing 3 Strikes (1080Hz)", desc: "Authentic monastic ritual strikes (30% → 65% → 100%), solemn and clarifying.", duration: "16s", src: "sounds/yinqing_3strikes_crescendo_classic.mp3" },
+                            { name: "2. Crisp & Compact Yinqing 3 Strikes (1200Hz)", desc: "Faster strike intervals, luminous piercing clarity, ideal for waking focus.", duration: "13s", src: "sounds/yinqing_3strikes_crescendo_crisp.mp3" },
+                            { name: "3. Warm Copper Yinqing 3 Strikes (852Hz)", desc: "Third-eye chakra soothing frequency, smooth attack, calming and gentle on ears.", duration: "16.5s", src: "sounds/yinqing_3strikes_crescendo_warm.mp3" }
+                        ]
+                    },
+                    {
+                        title: "🏛️ Grand Eastern Acoustic Instruments (Great Bells & Gongs)",
+                        items: [
+                            { name: "1. Eastern Morning Zen Bell (96Hz)", desc: "Authentic wooden log impact on heavy cast bronze temple bell, 16s acoustic tail.", duration: "16s", src: "sounds/01_grand_temple_bell.mp3" },
+                            { name: "2. Oceanic Deep Zen Gong (70Hz)", desc: "Gradual energy expansion (gong wash) like tidal waves, deeply grounding.", duration: "20s", src: "sounds/03_deep_zen_gong.mp3" }
+                        ]
+                    }
+                ],
+                endSoundOptions: [
+                    {
+                        group: "🥣 Daqing 3 Strikes (Crescendo · Recommended for Conclusion)",
+                        options: [
+                            { value: "sounds/daqing_3strikes_01_ancient_bronze.mp3", text: "Ancient Bronze Daqing 3 Strikes (108Hz)" },
+                            { value: "sounds/daqing_3strikes_02_pure_resonant.mp3", text: "Pure White Bronze Jade Sound 3 Strikes (216Hz)" },
+                            { value: "sounds/daqing_3strikes_03_tibetan_om.mp3", text: "Tibetan Black Gold Singing Bowl 3 Strikes (136.1Hz OM)" },
+                            { value: "sounds/daqing_3strikes_04_grounding_174.mp3", text: "Grounding 174Hz Solfeggio Daqing 3 Strikes" },
+                            { value: "sounds/daqing_3strikes_05_deep_pool.mp3", text: "Deep Valley Inharmonic Bowl 3 Strikes (120Hz)" }
+                        ]
+                    },
+                    {
+                        group: "⚡ Yinqing 3 Strikes (Crescendo · Crisp Clarity)",
+                        options: [
+                            { value: "sounds/yinqing_3strikes_crescendo_classic.mp3", text: "Classic Zen Yinqing 3 Strikes (1080Hz)" },
+                            { value: "sounds/yinqing_3strikes_crescendo_crisp.mp3", text: "Crisp & Compact Yinqing 3 Strikes (1200Hz)" },
+                            { value: "sounds/yinqing_3strikes_crescendo_warm.mp3", text: "Warm Purple Copper Yinqing 3 Strikes (852Hz)" }
+                        ]
+                    },
+                    {
+                        group: "🥣 Daqing / Singing Bowl Single Strike",
+                        options: [
+                            { value: "sounds/daqing_01_ancient_bronze.mp3", text: "Ancient Bronze Daqing (108Hz)" },
+                            { value: "sounds/daqing_02_pure_resonant.mp3", text: "Pure White Bronze Jade Sound (216Hz)" },
+                            { value: "sounds/daqing_03_tibetan_om.mp3", text: "Tibetan Black Gold Singing Bowl (136.1Hz OM)" },
+                            { value: "sounds/daqing_04_grounding_174.mp3", text: "174Hz Grounding Daqing (Earth Root)" },
+                            { value: "sounds/daqing_05_dual_strike_layered.mp3", text: "Dual-Mallet Layered Resonance Daqing" }
+                        ]
+                    },
+                    {
+                        group: "🔔 Yinqing Single Strike",
+                        options: [
+                            { value: "sounds/yinqing_01_classic_bronze.mp3", text: "Classic Zen Yinqing (1080Hz)" },
+                            { value: "sounds/yinqing_02_crystalline_high.mp3", text: "Crystalline High Chime (1728Hz Focus)" },
+                            { value: "sounds/yinqing_03_warm_soft.mp3", text: "Warm Copper Yinqing (852Hz Third Eye)" },
+                            { value: "sounds/yinqing_04_double_strike.mp3", text: "Monastic Ritual Double Chime (Ding-Ding)" },
+                            { value: "sounds/yinqing_05_harmonic_528.mp3", text: "528Hz Harmonic DNA Chime" }
+                        ]
+                    },
+                    {
+                        group: "🏛️ Grand Eastern Instruments",
+                        options: [
+                            { value: "sounds/01_grand_temple_bell.mp3", text: "Grand Eastern Temple Bell (96Hz)" },
+                            { value: "sounds/03_deep_zen_gong.mp3", text: "Oceanic Deep Zen Gong (70Hz)" },
+                            { value: "sounds/04_healing_432hz_chime.mp3", text: "432Hz Pure Healing Chime" }
+                        ]
+                    }
+                ],
+                startSoundOptions: [
+                    { value: "none", text: "None (Silent Start)" },
+                    { value: "sounds/yinqing_01_classic_bronze.mp3", text: "Classic Zen Yinqing (Gentle Start)" },
+                    { value: "sounds/daqing_01_ancient_bronze.mp3", text: "Ancient Bronze Daqing (Solemn Start)" },
+                    { value: "sounds/yinqing_04_double_strike.mp3", text: "Ritual Double Chime (Begin Session)" },
+                    { value: "sounds/01_grand_temple_bell.mp3", text: "Grand Eastern Temple Bell" }
+                ],
+                intervalSoundOptions: [
+                    { value: "sounds/yinqing_01_classic_bronze.mp3", text: "Every 15 min · Classic Yinqing (1 soft strike)" },
+                    { value: "sounds/yinqing_03_warm_soft.mp3", text: "Every 15 min · Warm Purple Copper Yinqing" },
+                    { value: "sounds/04_healing_432hz_chime.mp3", text: "Every 15 min · 432Hz Healing Chime" },
+                    { value: "sounds/daqing_02_pure_resonant.mp3", text: "Every 15 min · White Bronze Jade Sound" },
+                    { value: "none", text: "Disable Interval Chimes" }
+                ]
+            },
+            zh: {
+                langBtn: "English",
+                title: "禅 修 计 时 器",
+                subtitle: "MEDITATION TIMER · 万籁俱寂 · 一念清净",
+                pageTitle: "禅修计时器 · Meditation Timer",
+                runningTitle: (time) => `(${time}) 禅修中 · 冥想计时器`,
+                statusReady: "静待启修",
+                statusRunning: "静心止息 · 专注呼吸",
+                statusPaused: "禅修暂停 · 稍事休息",
+                statusInterval: (m) => `🔔 觉知提醒 · 已静坐 ${m} 分钟`,
+                statusFinished: "✨ 时间已至 · 恭敬出定",
+                startBtn: "开 始",
+                pauseBtn: "暂 停",
+                resumeBtn: "继 续",
+                resetBtn: "重 置",
+                fullscreenBtn: "全 屏",
+                exitFullscreenBtn: "退出全屏",
+                presetLabel: "预设静坐时长 (PRESETS)",
+                presetCurrent: (m) => `当前: ${m} 分钟`,
+                customCurrentSec: (s) => `自定义: ${s} 秒`,
+                customCurrentMin: (m) => `自定义: ${m} 分钟`,
+                testCurrentSec: (s) => `测试: ${s} 秒`,
+                testCurrentMin: (m) => `测试: ${m} 分钟`,
+                adjMinus5: "- 5 分钟",
+                adjMinus1: "- 1 分钟",
+                adjPlus1: "+ 1 分钟",
+                adjPlus5: "+ 5 分钟",
+                test10s: "⚡ 测试 10 秒",
+                test1m: "⚡ 1 分钟",
+                test10sTitle: "测试时钟响铃",
+                test1mTitle: "测试1分钟",
+                endSoundLabel: "🔔 结束提示音 (出定之声)",
+                startSoundLabel: "🥢 起修提示音 (开始时敲击)",
+                intervalSoundLabel: "⏱️ 间歇提示音 (超过15分钟时)",
+                previewBtn: "试听",
+                stopBtn: "停止",
+                keepScreenLabel: "保持屏幕常亮 (防止息屏)",
+                autoLoopLabel: "出定声循环播放 (直到手动关闭)",
+                toggleVaultExpand: "📚 展开 / 收起 全部禅音品鉴库 (20+ 款原生音效)",
+                toggleVaultCollapse: "📚 收起全部禅音品鉴库",
+                footerText: "禅修计时器 · 专业声学生成 · 48kHz 无损录音室母带品质",
+                mediaTitle: "禅修静坐中 · 冥想计时器",
+                mediaArtist: "万籁俱寂 · 一念清净",
+                mediaAlbum: "Meditation Timer",
+                alertSilentStart: "当前选择为【无 (静默开始)】。若想试听起修声，请在下拉框中选择一款磬声或大钟。",
+                alertNoInterval: "当前选择为【关闭间歇提示音】。若想试听间歇声，请在下拉框中选择一款磬声。",
+                fullscreenError: (msg) => `无法进入全屏: ${msg}`,
+                vaultCategories: [
+                    {
+                        title: "🥣 五种大磬三声 · 由轻至重 (小声到大声 · 出定推荐)",
+                        items: [
+                            { name: "1. 禅林古铜大磬三声 (108Hz)", desc: "0s轻 → 3s中 → 6.8s重。百八烦恼断除之数，重青铜古朴深稳，余波悠荡22s。", duration: "22s", src: "sounds/daqing_3strikes_01_ancient_bronze.mp3" },
+                            { name: "2. 清修白铜玉磬三声 (216Hz)", desc: "致密高纯白铜，清润如玉，三层声浪层叠推涌，扫除心头烦乱杂念。", duration: "20s", src: "sounds/daqing_3strikes_02_pure_resonant.mp3" },
+                            { name: "3. 藏密黑金颂钵三声 (136.1Hz OM)", desc: "经典 OM 宇宙频率，三推达到深层 Theta 脑波同步，波浪共振感极强。", duration: "24s", src: "sounds/daqing_3strikes_03_tibetan_om.mp3" },
+                            { name: "4. 174Hz安神大磬三声 (大地扎根)", desc: "厚毡槌渐强推击，即使末声宏亮也毫无尖锐感，纯厚声波温柔包容。", duration: "22s", src: "sounds/daqing_3strikes_04_grounding_174.mp3" },
+                            { name: "5. 空灵深潭大磬三声 (立体回绕)", desc: "三击左右声场微幅移动，营造如置身古刹深谷的空灵声场与立体驻波。", duration: "23s", src: "sounds/daqing_3strikes_05_deep_pool.mp3" }
+                        ]
+                    },
+                    {
+                        title: "⚡ 引磬三击 · 由轻至重 (经典禅门规矩)",
+                        items: [
+                            { name: "1. 经典禅门三击 (1080Hz)", desc: "正统寺院引磬起坐仪轨。微扣(30%) → 次扣(65%) → 重扣(100%)，庄严肃穆。", duration: "16s", src: "sounds/yinqing_3strikes_crescendo_classic.mp3" },
+                            { name: "2. 紧凑清越三击 (1200Hz)", desc: "敲击间隔更紧凑明快，基音清澈破空，适合短时静坐或快速开静。", duration: "13s", src: "sounds/yinqing_3strikes_crescendo_crisp.mp3" },
+                            { name: "3. 温润紫铜三击 (852Hz)", desc: "眉心轮柔和频率，起音圆润，由浅入深慢慢舒展，平复心绪不刺耳。", duration: "16.5s", src: "sounds/yinqing_3strikes_crescendo_warm.mp3" }
+                        ]
+                    },
+                    {
+                        title: "🏛️ 东方大器 · 大钟与巨锣",
+                        items: [
+                            { name: "1. 东方晨钟 · 禅宗大钟 (96Hz)", desc: "木槌击打青铜的低频冲击与宏大空间驻波，晨钟暮鼓，余韵达16秒。", duration: "16s", src: "sounds/01_grand_temple_bell.mp3" },
+                            { name: "2. 浩瀚深海 · 禅修巨锣 (70Hz)", desc: "铜锣能量逐渐释放膨胀(Gong Wash)，如潮涌海浪，深邃摄心。", duration: "20s", src: "sounds/03_deep_zen_gong.mp3" }
+                        ]
+                    }
+                ],
+                endSoundOptions: [
+                    {
+                        group: "🥣 大磬三击 (由轻至重 · 推荐出定)",
+                        options: [
+                            { value: "sounds/daqing_3strikes_01_ancient_bronze.mp3", text: "禅林古铜大磬三声 (108Hz)" },
+                            { value: "sounds/daqing_3strikes_02_pure_resonant.mp3", text: "清修白铜玉磬三声 (216Hz)" },
+                            { value: "sounds/daqing_3strikes_03_tibetan_om.mp3", text: "藏密黑金颂钵三声 (136.1Hz OM)" },
+                            { value: "sounds/daqing_3strikes_04_grounding_174.mp3", text: "索尔菲吉奥174Hz安神大磬三声" },
+                            { value: "sounds/daqing_3strikes_05_deep_pool.mp3", text: "空灵深潭大磬三声 (120Hz)" }
+                        ]
+                    },
+                    {
+                        group: "⚡ 引磬三击 (由轻至重 · 清越破空)",
+                        options: [
+                            { value: "sounds/yinqing_3strikes_crescendo_classic.mp3", text: "经典禅门引磬三击 (1080Hz)" },
+                            { value: "sounds/yinqing_3strikes_crescendo_crisp.mp3", text: "紧凑清越引磬三击 (1200Hz)" },
+                            { value: "sounds/yinqing_3strikes_crescendo_warm.mp3", text: "温润紫铜引磬三击 (852Hz)" }
+                        ]
+                    },
+                    {
+                        group: "🥣 大磬 / 颂钵 单击",
+                        options: [
+                            { value: "sounds/daqing_01_ancient_bronze.mp3", text: "禅林古铜大磬 (108Hz 纯原声)" },
+                            { value: "sounds/daqing_02_pure_resonant.mp3", text: "清修白铜玉磬 (216Hz 澄明律)" },
+                            { value: "sounds/daqing_03_tibetan_om.mp3", text: "藏密黑金颂钵 (136.1Hz OM)" },
+                            { value: "sounds/daqing_04_grounding_174.mp3", text: "174Hz 安神大磬 (大地扎根)" },
+                            { value: "sounds/daqing_05_dual_strike_layered.mp3", text: "禅门双槌叠韵大磬 (立体回绕)" }
+                        ]
+                    },
+                    {
+                        group: "🔔 引磬 单击",
+                        options: [
+                            { value: "sounds/yinqing_01_classic_bronze.mp3", text: "经典禅门引磬 (1080Hz)" },
+                            { value: "sounds/yinqing_02_crystalline_high.mp3", text: "破空晶莹高磬 (1728Hz 破昏沉)" },
+                            { value: "sounds/yinqing_03_warm_soft.mp3", text: "温润紫铜引磬 (852Hz 眉心轮)" },
+                            { value: "sounds/yinqing_04_double_strike.mp3", text: "禅堂仪轨连击磬 (叮~叮)" },
+                            { value: "sounds/yinqing_05_harmonic_528.mp3", text: "528Hz 空灵谐波磬" }
+                        ]
+                    },
+                    {
+                        group: "🏛️ 东方大器之声",
+                        options: [
+                            { value: "sounds/01_grand_temple_bell.mp3", text: "东方晨钟 · 禅宗大钟 (96Hz)" },
+                            { value: "sounds/03_deep_zen_gong.mp3", text: "浩瀚深海 · 禅修巨锣 (70Hz)" },
+                            { value: "sounds/04_healing_432hz_chime.mp3", text: "432Hz 纯净引磬" }
+                        ]
+                    }
+                ],
+                startSoundOptions: [
+                    { value: "none", text: "无 (静默开始)" },
+                    { value: "sounds/yinqing_01_classic_bronze.mp3", text: "经典禅门引磬 (轻灵启程)" },
+                    { value: "sounds/daqing_01_ancient_bronze.mp3", text: "禅林古铜大磬 (庄严起坐)" },
+                    { value: "sounds/yinqing_04_double_strike.mp3", text: "仪轨双击磬 (开静止静)" },
+                    { value: "sounds/01_grand_temple_bell.mp3", text: "东方晨钟 (浑厚大钟)" }
+                ],
+                intervalSoundOptions: [
+                    { value: "sounds/yinqing_01_classic_bronze.mp3", text: "每15分钟 · 经典引磬 (轻击一声)" },
+                    { value: "sounds/yinqing_03_warm_soft.mp3", text: "每15分钟 · 温润紫铜引磬 (柔和一声)" },
+                    { value: "sounds/04_healing_432hz_chime.mp3", text: "每15分钟 · 432Hz治愈引磬 (清澈一声)" },
+                    { value: "sounds/daqing_02_pure_resonant.mp3", text: "每15分钟 · 清修白铜玉磬 (澄明一声)" },
+                    { value: "none", text: "关闭间歇提示音" }
+                ]
+            }
+        };
+
+        // Current Language State (Default English as requested, saved in localStorage)
+        let currentLang = localStorage.getItem('meditation_timer_lang') || 'en';
+
         // --- CONSTANTS & STATE ---
         const CIRCUMFERENCE = 2 * Math.PI * 135; // 848.23
         let timerInterval = null;
@@ -859,6 +1046,9 @@
         let intervalStatusTimeout = null;
 
         // DOM Elements
+        const langSwitchText = document.getElementById('langSwitchText');
+        const headerTitle = document.getElementById('headerTitle');
+        const headerSubtitle = document.getElementById('headerSubtitle');
         const timerCard = document.getElementById('timerCard');
         const timeDisplay = document.getElementById('timeDisplay');
         const progressCircle = document.getElementById('progressCircle');
@@ -869,26 +1059,216 @@
         const startBtnText = document.getElementById('startBtnText');
         const resetBtn = document.getElementById('resetBtn');
         const fullscreenBtn = document.getElementById('fullscreenBtn');
+        const presetLabel = document.getElementById('presetLabel');
         const presetBtns = document.querySelectorAll('.preset-btn');
         const currentPresetTip = document.getElementById('currentPresetTip');
+        const adjMinus5 = document.getElementById('adjMinus5');
+        const adjMinus1 = document.getElementById('adjMinus1');
+        const adjPlus1 = document.getElementById('adjPlus1');
+        const adjPlus5 = document.getElementById('adjPlus5');
+        const test10s = document.getElementById('test10s');
+        const test1m = document.getElementById('test1m');
+        const endSoundLabel = document.getElementById('endSoundLabel');
+        const startSoundLabel = document.getElementById('startSoundLabel');
+        const intervalSoundLabel = document.getElementById('intervalSoundLabel');
         const endSoundSelect = document.getElementById('endSoundSelect');
         const startSoundSelect = document.getElementById('startSoundSelect');
         const intervalSoundSelect = document.getElementById('intervalSoundSelect');
         const previewSoundBtn = document.getElementById('previewSoundBtn');
         const previewStartSoundBtn = document.getElementById('previewStartSoundBtn');
         const previewIntervalSoundBtn = document.getElementById('previewIntervalSoundBtn');
+        const keepScreenLabel = document.getElementById('keepScreenLabel');
         const keepScreenOnCheckbox = document.getElementById('keepScreenOn');
+        const autoLoopLabel = document.getElementById('autoLoopLabel');
         const autoLoopSoundCheckbox = document.getElementById('autoLoopSound');
+        const toggleVaultBtn = document.getElementById('toggleVaultBtn');
+        const toggleVaultText = document.getElementById('toggleVaultText');
+        const vaultContainer = document.getElementById('vaultContainer');
+        const footerText = document.getElementById('footerText');
         const globalAudioPlayer = document.getElementById('globalAudioPlayer');
         const intervalAudioPlayer = document.getElementById('intervalAudioPlayer');
         const startAudioPlayer = document.getElementById('startAudioPlayer');
         const silentAudioPlayer = document.getElementById('silentAudioPlayer');
-        const toggleVaultBtn = document.getElementById('toggleVaultBtn');
-        const vaultContainer = document.getElementById('vaultContainer');
 
         // Init Progress stroke
         progressCircle.style.strokeDasharray = CIRCUMFERENCE;
         progressCircle.style.strokeDashoffset = 0;
+
+        // --- I18N RENDER ENGINE ---
+        function applyLanguage(lang) {
+            currentLang = lang;
+            localStorage.setItem('meditation_timer_lang', lang);
+            document.documentElement.lang = lang === 'en' ? 'en' : 'zh-CN';
+            const t = I18N[lang];
+
+            // Header & language switch button
+            langSwitchText.textContent = t.langBtn;
+            headerTitle.textContent = t.title;
+            headerSubtitle.textContent = t.subtitle;
+
+            // Controls
+            resetBtn.textContent = t.resetBtn;
+            resetBtn.title = t.resetBtn;
+            fullscreenBtn.textContent = document.fullscreenElement ? t.exitFullscreenBtn : t.fullscreenBtn;
+            fullscreenBtn.title = t.fullscreenBtn;
+
+            if (isRunning) {
+                startBtnText.textContent = t.pauseBtn;
+            } else if (isPaused) {
+                startBtnText.textContent = t.resumeBtn;
+            } else {
+                startBtnText.textContent = t.startBtn;
+            }
+
+            // Status Badge
+            if (remainingSeconds <= 0) {
+                statusText.textContent = t.statusFinished;
+            } else if (isRunning && !isPaused) {
+                statusText.textContent = t.statusRunning;
+            } else if (isPaused) {
+                statusText.textContent = t.statusPaused;
+            } else {
+                statusText.textContent = t.statusReady;
+            }
+
+            // Presets & Adjustments
+            presetLabel.textContent = t.presetLabel;
+            if (presetBtns) {
+                let hasActive = false;
+                presetBtns.forEach(b => {
+                    if (b.classList.contains('active')) {
+                        hasActive = true;
+                        currentPresetTip.textContent = t.presetCurrent(b.getAttribute('data-minutes'));
+                    }
+                });
+                if (!hasActive) {
+                    currentPresetTip.textContent = totalSeconds < 60 ? t.customCurrentSec(totalSeconds) : t.customCurrentMin(Math.round(totalSeconds / 60));
+                }
+            }
+
+            adjMinus5.textContent = t.adjMinus5;
+            adjMinus1.textContent = t.adjMinus1;
+            adjPlus1.textContent = t.adjPlus1;
+            adjPlus5.textContent = t.adjPlus5;
+            test10s.textContent = t.test10s;
+            test10s.title = t.test10sTitle;
+            test1m.textContent = t.test1m;
+            test1m.title = t.test1mTitle;
+
+            // Sound Labels
+            endSoundLabel.textContent = t.endSoundLabel;
+            startSoundLabel.textContent = t.startSoundLabel;
+            intervalSoundLabel.textContent = t.intervalSoundLabel;
+
+            // Toggles & Vault & Footer
+            keepScreenLabel.textContent = t.keepScreenLabel;
+            autoLoopLabel.textContent = t.autoLoopLabel;
+            toggleVaultText.textContent = vaultContainer.classList.contains('show') ? t.toggleVaultCollapse : t.toggleVaultExpand;
+            footerText.textContent = t.footerText;
+
+            // Preview button texts
+            const previewBtns = document.querySelectorAll('.icon-btn .preview-text');
+            previewBtns.forEach(btnSpan => {
+                if (!isPreviewing) btnSpan.textContent = t.previewBtn;
+            });
+
+            // Re-populate Dropdowns preserving current values
+            populateSoundSelects(lang);
+
+            // Re-render Sound Vault
+            renderSoundVault(lang);
+
+            // Update title
+            updateDisplay(false);
+        }
+
+        function toggleLanguage() {
+            applyLanguage(currentLang === 'en' ? 'zh' : 'en');
+        }
+
+        function populateSoundSelects(lang) {
+            const t = I18N[lang];
+
+            // 1. Ending Sound Select
+            const currentEndVal = endSoundSelect.value || "sounds/daqing_3strikes_01_ancient_bronze.mp3";
+            endSoundSelect.innerHTML = "";
+            t.endSoundOptions.forEach(groupItem => {
+                const optgroup = document.createElement('optgroup');
+                optgroup.label = groupItem.group;
+                groupItem.options.forEach(opt => {
+                    const option = document.createElement('option');
+                    option.value = opt.value;
+                    option.textContent = opt.text;
+                    if (opt.value === currentEndVal) option.selected = true;
+                    optgroup.appendChild(option);
+                });
+                endSoundSelect.appendChild(optgroup);
+            });
+
+            // 2. Start Sound Select
+            const currentStartVal = startSoundSelect.value || "none";
+            startSoundSelect.innerHTML = "";
+            t.startSoundOptions.forEach(opt => {
+                const option = document.createElement('option');
+                option.value = opt.value;
+                option.textContent = opt.text;
+                if (opt.value === currentStartVal) option.selected = true;
+                startSoundSelect.appendChild(option);
+            });
+
+            // 3. Interval Sound Select
+            const currentIntervalVal = intervalSoundSelect.value || "sounds/yinqing_01_classic_bronze.mp3";
+            intervalSoundSelect.innerHTML = "";
+            t.intervalSoundOptions.forEach(opt => {
+                const option = document.createElement('option');
+                option.value = opt.value;
+                option.textContent = opt.text;
+                if (opt.value === currentIntervalVal) option.selected = true;
+                intervalSoundSelect.appendChild(option);
+            });
+        }
+
+        function renderSoundVault(lang) {
+            const t = I18N[lang];
+            vaultContainer.innerHTML = "";
+            t.vaultCategories.forEach(cat => {
+                const section = document.createElement('div');
+                const title = document.createElement('h3');
+                title.className = 'vault-category-title';
+                title.textContent = cat.title;
+                section.appendChild(title);
+
+                const grid = document.createElement('div');
+                grid.className = 'vault-grid';
+
+                cat.items.forEach(item => {
+                    const card = document.createElement('div');
+                    card.className = 'vault-card';
+
+                    const textWrap = document.createElement('div');
+                    const name = document.createElement('div');
+                    name.className = 'vault-name';
+                    name.textContent = item.name;
+                    const desc = document.createElement('div');
+                    desc.className = 'vault-desc';
+                    desc.textContent = item.desc;
+                    textWrap.appendChild(name);
+                    textWrap.appendChild(desc);
+
+                    const btn = document.createElement('button');
+                    btn.className = 'vault-play-btn';
+                    btn.innerHTML = `▶ ${t.previewBtn} ${item.duration}`;
+                    btn.onclick = () => playSpecificSound(item.src);
+
+                    card.appendChild(textWrap);
+                    card.appendChild(btn);
+                    grid.appendChild(card);
+                });
+
+                section.appendChild(grid);
+                vaultContainer.appendChild(section);
+            });
+        }
 
         // --- MOBILE AUDIO UNLOCK & KEEP-ALIVE ---
         function unlockMobileAudio() {
@@ -941,10 +1321,11 @@
             // 4. Register MediaSession metadata (supports lock-screen display & controls on iOS/Android)
             if ('mediaSession' in navigator) {
                 try {
+                    const t = I18N[currentLang];
                     navigator.mediaSession.metadata = new MediaMetadata({
-                        title: '禅修静坐中 · 冥想计时器',
-                        artist: '万籁俱寂 · 一念清净',
-                        album: 'Meditation Timer'
+                        title: t.mediaTitle,
+                        artist: t.mediaArtist,
+                        album: t.mediaAlbum
                     });
                     navigator.mediaSession.playbackState = 'playing';
                     navigator.mediaSession.setActionHandler('play', () => { if (isPaused) startTimer(); });
@@ -981,7 +1362,8 @@
                 progressCircle.style.strokeDashoffset = offset;
             }
 
-            document.title = isRunning ? `(${formatTime(remainingSeconds)}) 禅修中 · 冥想计时器` : '禅修计时器 · Meditation Timer';
+            const t = I18N[currentLang];
+            document.title = isRunning ? t.runningTitle(formatTime(remainingSeconds)) : t.pageTitle;
         }
 
         // --- PRESET SELECTION ---
@@ -991,7 +1373,8 @@
                 selectedPresetMinutes = minutes;
                 presetBtns.forEach(b => b.classList.toggle('active', b === btn));
                 totalSeconds = minutes * 60;
-                currentPresetTip.textContent = `当前: ${minutes} 分钟`;
+                const t = I18N[currentLang];
+                currentPresetTip.textContent = t.presetCurrent(minutes);
                 resetTimer(false);
             });
         });
@@ -999,14 +1382,16 @@
         function adjustTime(deltaSeconds) {
             totalSeconds = Math.max(10, (isRunning ? remainingSeconds : totalSeconds) + deltaSeconds);
             presetBtns.forEach(b => b.classList.remove('active'));
-            currentPresetTip.textContent = totalSeconds < 60 ? `自定义: ${totalSeconds} 秒` : `自定义: ${Math.round(totalSeconds / 60)} 分钟`;
+            const t = I18N[currentLang];
+            currentPresetTip.textContent = totalSeconds < 60 ? t.customCurrentSec(totalSeconds) : t.customCurrentMin(Math.round(totalSeconds / 60));
             resetTimer(false);
         }
 
         function setExactSeconds(sec) {
             totalSeconds = sec;
             presetBtns.forEach(b => b.classList.remove('active'));
-            currentPresetTip.textContent = sec < 60 ? `测试: ${sec} 秒` : `测试: ${Math.round(sec / 60)} 分钟`;
+            const t = I18N[currentLang];
+            currentPresetTip.textContent = sec < 60 ? t.testCurrentSec(sec) : t.testCurrentMin(Math.round(sec / 60));
             resetTimer(false);
         }
 
@@ -1047,6 +1432,8 @@
 
             if (isRunning && !isPaused) return;
 
+            const t = I18N[currentLang];
+
             // 1. Critical for Mobile: Unlock audio inside touch handler
             unlockMobileAudio();
 
@@ -1063,8 +1450,8 @@
 
             timerCard.classList.add('running');
             timerCard.classList.remove('paused');
-            statusText.textContent = "静心止息 · 专注呼吸";
-            startBtnText.textContent = "暂 停";
+            statusText.textContent = t.statusRunning;
+            startBtnText.textContent = t.pauseBtn;
             startBtnIcon.textContent = "⏸";
 
             acquireWakeLock();
@@ -1075,12 +1462,13 @@
 
         function triggerIntervalChime(elapsedSeconds) {
             playIntervalChime();
+            const t = I18N[currentLang];
             const elapsedMinutes = Math.floor(elapsedSeconds / 60);
-            statusText.textContent = `🔔 觉知提醒 · 已静坐 ${elapsedMinutes} 分钟`;
+            statusText.textContent = t.statusInterval(elapsedMinutes);
             clearTimeout(intervalStatusTimeout);
             intervalStatusTimeout = setTimeout(() => {
                 if (isRunning && !isPaused) {
-                    statusText.textContent = "静心止息 · 专注呼吸";
+                    statusText.textContent = t.statusRunning;
                 }
             }, 6000);
         }
@@ -1099,9 +1487,10 @@
                 try { navigator.mediaSession.playbackState = 'paused'; } catch(e){}
             }
 
+            const t = I18N[currentLang];
             timerCard.classList.add('paused');
-            statusText.textContent = "禅修暂停 · 稍事休息";
-            startBtnText.textContent = "继 续";
+            statusText.textContent = t.statusPaused;
+            startBtnText.textContent = t.resumeBtn;
             startBtnIcon.textContent = "▶";
             releaseWakeLock();
         }
@@ -1127,19 +1516,20 @@
                 try { navigator.mediaSession.playbackState = 'none'; } catch(e){}
             }
 
+            const t = I18N[currentLang];
             if (restorePreset) {
                 totalSeconds = selectedPresetMinutes * 60;
                 presetBtns.forEach(b => {
                     b.classList.toggle('active', parseInt(b.getAttribute('data-minutes'), 10) === selectedPresetMinutes);
                 });
-                currentPresetTip.textContent = `当前: ${selectedPresetMinutes} 分钟`;
+                currentPresetTip.textContent = t.presetCurrent(selectedPresetMinutes);
             }
 
             remainingSeconds = totalSeconds;
 
             timerCard.classList.remove('running', 'paused');
-            statusText.textContent = "静待启修";
-            startBtnText.textContent = "开 始";
+            statusText.textContent = t.statusReady;
+            startBtnText.textContent = t.startBtn;
             startBtnIcon.textContent = "▶";
 
             stopAudio();
@@ -1163,9 +1553,10 @@
                 silentAudioPlayer.currentTime = 0;
             }
 
+            const t = I18N[currentLang];
             timerCard.classList.remove('running', 'paused');
-            statusText.textContent = "✨ 时间已至 · 恭敬出定";
-            startBtnText.textContent = "开 始";
+            statusText.textContent = t.statusFinished;
+            startBtnText.textContent = t.startBtn;
             startBtnIcon.textContent = "▶";
 
             playEndingBell();
@@ -1234,28 +1625,30 @@
                 silentAudioPlayer.pause();
                 silentAudioPlayer.currentTime = 0;
             }
+            const t = I18N[currentLang];
             if (previewSoundBtn) {
-                previewSoundBtn.innerHTML = '<span>▶</span> 试听';
+                previewSoundBtn.innerHTML = `<span>▶</span> <span class="preview-text">${t.previewBtn}</span>`;
             }
             if (previewStartSoundBtn) {
-                previewStartSoundBtn.innerHTML = '<span>▶</span> 试听';
+                previewStartSoundBtn.innerHTML = `<span>▶</span> <span class="preview-text">${t.previewBtn}</span>`;
             }
             if (previewIntervalSoundBtn) {
-                previewIntervalSoundBtn.innerHTML = '<span>▶</span> 试听';
+                previewIntervalSoundBtn.innerHTML = `<span>▶</span> <span class="preview-text">${t.previewBtn}</span>`;
             }
             isPreviewing = false;
         }
 
         // Preview End Bell button
         previewSoundBtn.addEventListener('click', () => {
+            const t = I18N[currentLang];
             if (isPreviewing) {
                 stopAudio();
             } else {
                 playSpecificSound(endSoundSelect.value);
-                previewSoundBtn.innerHTML = '<span>⏹</span> 停止';
+                previewSoundBtn.innerHTML = `<span>⏹</span> <span class="preview-text">${t.stopBtn}</span>`;
                 isPreviewing = true;
                 globalAudioPlayer.onended = () => {
-                    previewSoundBtn.innerHTML = '<span>▶</span> 试听';
+                    previewSoundBtn.innerHTML = `<span>▶</span> <span class="preview-text">${t.previewBtn}</span>`;
                     isPreviewing = false;
                 };
             }
@@ -1264,18 +1657,19 @@
         // Preview Start Bell button
         if (previewStartSoundBtn) {
             previewStartSoundBtn.addEventListener('click', () => {
+                const t = I18N[currentLang];
                 if (startSoundSelect.value === 'none') {
-                    alert('当前选择为【无 (静默开始)】。若想试听起修声，请在下拉框中选择一款磬声或大钟。');
+                    alert(t.alertSilentStart);
                     return;
                 }
                 if (isPreviewing) {
                     stopAudio();
                 } else {
                     playSpecificSound(startSoundSelect.value);
-                    previewStartSoundBtn.innerHTML = '<span>⏹</span> 停止';
+                    previewStartSoundBtn.innerHTML = `<span>⏹</span> <span class="preview-text">${t.stopBtn}</span>`;
                     isPreviewing = true;
                     globalAudioPlayer.onended = () => {
-                        previewStartSoundBtn.innerHTML = '<span>▶</span> 试听';
+                        previewStartSoundBtn.innerHTML = `<span>▶</span> <span class="preview-text">${t.previewBtn}</span>`;
                         isPreviewing = false;
                     };
                 }
@@ -1285,18 +1679,19 @@
         // Preview Interval Bell button
         if (previewIntervalSoundBtn) {
             previewIntervalSoundBtn.addEventListener('click', () => {
+                const t = I18N[currentLang];
                 if (intervalSoundSelect.value === 'none') {
-                    alert('当前选择为【关闭间歇提示音】。若想试听间歇声，请在下拉框中选择一款磬声。');
+                    alert(t.alertNoInterval);
                     return;
                 }
                 if (isPreviewing) {
                     stopAudio();
                 } else {
                     playSpecificSound(intervalSoundSelect.value);
-                    previewIntervalSoundBtn.innerHTML = '<span>⏹</span> 停止';
+                    previewIntervalSoundBtn.innerHTML = `<span>⏹</span> <span class="preview-text">${t.stopBtn}</span>`;
                     isPreviewing = true;
                     globalAudioPlayer.onended = () => {
-                        previewIntervalSoundBtn.innerHTML = '<span>▶</span> 试听';
+                        previewIntervalSoundBtn.innerHTML = `<span>▶</span> <span class="preview-text">${t.previewBtn}</span>`;
                         isPreviewing = false;
                     };
                 }
@@ -1306,6 +1701,8 @@
         // Toggle Sound Vault
         toggleVaultBtn.addEventListener('click', () => {
             vaultContainer.classList.toggle('show');
+            const t = I18N[currentLang];
+            toggleVaultText.textContent = vaultContainer.classList.contains('show') ? t.toggleVaultCollapse : t.toggleVaultExpand;
             if (vaultContainer.classList.contains('show')) {
                 toggleVaultBtn.scrollIntoView({ behavior: 'smooth' });
             }
@@ -1323,30 +1720,32 @@
             }
         });
 
-        // Clicking the "重置" button restores to the selected preset cleanly
+        // Reset button restores to the selected preset cleanly
         resetBtn.addEventListener('click', () => {
             resetTimer(true);
         });
 
         // --- FULLSCREEN ZEN MODE ---
         fullscreenBtn.addEventListener('click', () => {
+            const t = I18N[currentLang];
             if (!document.fullscreenElement) {
                 document.documentElement.requestFullscreen().catch(err => {
-                    alert(`无法进入全屏: ${err.message}`);
+                    alert(t.fullscreenError(err.message));
                 });
                 document.body.classList.add('zen-mode');
-                fullscreenBtn.textContent = "退出全屏";
+                fullscreenBtn.textContent = t.exitFullscreenBtn;
             } else {
                 document.exitFullscreen();
                 document.body.classList.remove('zen-mode');
-                fullscreenBtn.textContent = "全 屏";
+                fullscreenBtn.textContent = t.fullscreenBtn;
             }
         });
 
         document.addEventListener('fullscreenchange', () => {
+            const t = I18N[currentLang];
             if (!document.fullscreenElement) {
                 document.body.classList.remove('zen-mode');
-                fullscreenBtn.textContent = "全 屏";
+                fullscreenBtn.textContent = t.fullscreenBtn;
             }
         });
 
@@ -1384,7 +1783,8 @@
             }
         });
 
-        // Initial render
+        // Initial setup with English default
+        applyLanguage(currentLang);
         updateDisplay();
     </script>
 </body>
