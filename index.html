@@ -580,31 +580,53 @@
             color: #0b0f16;
         }
 
-        /* FULLSCREEN ZEN MODE OVERLAY */
+        /* FULLSCREEN ZEN MODE OVERLAY (WORKS ON ALL MOBILES & DESKTOPS) */
         body.zen-mode {
-            padding: 0;
-            justify-content: center;
+            padding: 16px 12px !important;
+            justify-content: center !important;
+            align-items: center !important;
+            overflow: hidden !important;
+            background: #06090f !important;
         }
+        body.zen-mode .lang-switch-container,
         body.zen-mode header,
         body.zen-mode .preset-section,
         body.zen-mode .settings-card,
         body.zen-mode .sound-vault-toggle,
         body.zen-mode .vault-container,
         body.zen-mode footer {
-            display: none;
+            display: none !important;
+        }
+        body.zen-mode .app-container {
+            height: 100vh;
+            max-height: 100%;
+            justify-content: center;
+            align-items: center;
+            gap: 16px;
         }
         body.zen-mode .timer-display-card {
-            border: none;
-            box-shadow: none;
-            background: transparent;
-            padding: 0;
+            border: none !important;
+            box-shadow: none !important;
+            background: transparent !important;
+            padding: 0 !important;
+            width: 100%;
         }
         body.zen-mode .dial-wrapper {
-            width: 380px;
-            height: 380px;
+            width: min(82vw, 360px);
+            height: min(82vw, 360px);
         }
         body.zen-mode .time-text {
-            font-size: 5rem;
+            font-size: clamp(3.2rem, 12vw, 5rem);
+        }
+        body.zen-mode .controls-row {
+            margin-top: 18px;
+            width: 100%;
+            max-width: 360px;
+        }
+        body.zen-mode #fullscreenBtn {
+            background: rgba(212, 175, 55, 0.18);
+            border-color: var(--gold-primary);
+            color: var(--gold-light);
         }
 
         footer {
@@ -1146,8 +1168,9 @@
             // Controls
             resetBtn.textContent = t.resetBtn;
             resetBtn.title = t.resetBtn;
-            fullscreenBtn.textContent = document.fullscreenElement ? t.exitFullscreenBtn : t.fullscreenBtn;
-            fullscreenBtn.title = t.fullscreenBtn;
+            const isZenActive = isFullscreenActive();
+            fullscreenBtn.textContent = isZenActive ? t.exitFullscreenBtn : t.fullscreenBtn;
+            fullscreenBtn.title = isZenActive ? t.exitFullscreenBtn : t.fullscreenBtn;
 
             if (isRunning) {
                 startBtnText.textContent = t.pauseBtn;
@@ -1762,28 +1785,74 @@
             resetTimer(true);
         });
 
-        // --- FULLSCREEN ZEN MODE ---
-        fullscreenBtn.addEventListener('click', () => {
+        // --- ROBUST FULLSCREEN / ZEN MODE ENGINE (MOBILE & DESKTOP COMPATIBLE) ---
+        function isFullscreenActive() {
+            const doc = document;
+            const hasNativeFs = !!(doc.fullscreenElement || doc.webkitFullscreenElement || doc.mozFullScreenElement || doc.msFullscreenElement);
+            return hasNativeFs || document.body.classList.contains('zen-mode');
+        }
+
+        function updateFullscreenBtnUI(active) {
             const t = I18N[currentLang];
-            if (!document.fullscreenElement) {
-                document.documentElement.requestFullscreen().catch(err => {
-                    alert(t.fullscreenError(err.message));
-                });
-                document.body.classList.add('zen-mode');
-                fullscreenBtn.textContent = t.exitFullscreenBtn;
+            fullscreenBtn.textContent = active ? t.exitFullscreenBtn : t.fullscreenBtn;
+            fullscreenBtn.title = active ? t.exitFullscreenBtn : t.fullscreenBtn;
+        }
+
+        function enterZenFullscreen() {
+            document.body.classList.add('zen-mode');
+            updateFullscreenBtnUI(true);
+
+            // Try native HTML5 Fullscreen API with vendor prefixes
+            const elem = document.documentElement;
+            if (elem.requestFullscreen) {
+                elem.requestFullscreen().catch(() => {});
+            } else if (elem.webkitRequestFullscreen) {
+                elem.webkitRequestFullscreen();
+            } else if (elem.webkitRequestFullScreen) {
+                elem.webkitRequestFullScreen();
+            } else if (elem.mozRequestFullScreen) {
+                elem.mozRequestFullScreen();
+            } else if (elem.msRequestFullscreen) {
+                elem.msRequestFullscreen();
+            }
+        }
+
+        function exitZenFullscreen() {
+            document.body.classList.remove('zen-mode');
+            updateFullscreenBtnUI(false);
+
+            const doc = document;
+            if (doc.exitFullscreen && doc.fullscreenElement) {
+                doc.exitFullscreen().catch(() => {});
+            } else if (doc.webkitExitFullscreen && doc.webkitFullscreenElement) {
+                doc.webkitExitFullscreen();
+            } else if (doc.mozCancelFullScreen && doc.mozFullScreenElement) {
+                doc.mozCancelFullScreen();
+            } else if (doc.msExitFullscreen && doc.msFullscreenElement) {
+                doc.msExitFullscreen();
+            }
+        }
+
+        fullscreenBtn.addEventListener('click', (e) => {
+            e.stopPropagation();
+            if (isFullscreenActive()) {
+                exitZenFullscreen();
             } else {
-                document.exitFullscreen();
-                document.body.classList.remove('zen-mode');
-                fullscreenBtn.textContent = t.fullscreenBtn;
+                enterZenFullscreen();
             }
         });
 
-        document.addEventListener('fullscreenchange', () => {
-            const t = I18N[currentLang];
-            if (!document.fullscreenElement) {
-                document.body.classList.remove('zen-mode');
-                fullscreenBtn.textContent = t.fullscreenBtn;
-            }
+        // Listen to native fullscreen changes across browsers
+        ['fullscreenchange', 'webkitfullscreenchange', 'mozfullscreenchange', 'MSFullscreenChange'].forEach(evt => {
+            document.addEventListener(evt, () => {
+                const doc = document;
+                const isNativeFs = !!(doc.fullscreenElement || doc.webkitFullscreenElement || doc.mozFullScreenElement || doc.msFullscreenElement);
+                if (!isNativeFs && document.body.classList.contains('zen-mode')) {
+                    // Only exit zen-mode if exited natively
+                    document.body.classList.remove('zen-mode');
+                    updateFullscreenBtnUI(false);
+                }
+            });
         });
 
         // --- WAKE LOCK API (KEEP SCREEN AWAKE) ---
