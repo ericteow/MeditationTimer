@@ -581,6 +581,10 @@
         }
 
         /* FULLSCREEN ZEN MODE OVERLAY (WORKS ON ALL MOBILES & DESKTOPS) */
+        :fullscreen,
+        :-webkit-full-screen,
+        :-moz-full-screen,
+        :-ms-fullscreen,
         body.zen-mode {
             padding: 16px 12px !important;
             justify-content: center !important;
@@ -588,19 +592,49 @@
             overflow: hidden !important;
             background: #06090f !important;
         }
+
         :fullscreen .lang-switch-container,
         :-webkit-full-screen .lang-switch-container,
         :-moz-full-screen .lang-switch-container,
         :-ms-fullscreen .lang-switch-container,
         body.zen-mode .lang-switch-container,
+        :fullscreen header,
+        :-webkit-full-screen header,
+        :-moz-full-screen header,
+        :-ms-fullscreen header,
         body.zen-mode header,
+        :fullscreen .preset-section,
+        :-webkit-full-screen .preset-section,
+        :-moz-full-screen .preset-section,
+        :-ms-fullscreen .preset-section,
         body.zen-mode .preset-section,
+        :fullscreen .settings-card,
+        :-webkit-full-screen .settings-card,
+        :-moz-full-screen .settings-card,
+        :-ms-fullscreen .settings-card,
         body.zen-mode .settings-card,
+        :fullscreen .sound-vault-toggle,
+        :-webkit-full-screen .sound-vault-toggle,
+        :-moz-full-screen .sound-vault-toggle,
+        :-ms-fullscreen .sound-vault-toggle,
         body.zen-mode .sound-vault-toggle,
+        :fullscreen .vault-container,
+        :-webkit-full-screen .vault-container,
+        :-moz-full-screen .vault-container,
+        :-ms-fullscreen .vault-container,
         body.zen-mode .vault-container,
+        :fullscreen footer,
+        :-webkit-full-screen footer,
+        :-moz-full-screen footer,
+        :-ms-fullscreen footer,
         body.zen-mode footer {
             display: none !important;
         }
+
+        :fullscreen .app-container,
+        :-webkit-full-screen .app-container,
+        :-moz-full-screen .app-container,
+        :-ms-fullscreen .app-container,
         body.zen-mode .app-container {
             height: 100vh;
             max-height: 100%;
@@ -644,7 +678,7 @@
 </head>
 <body>
 
-    <div class="lang-switch-container" id="langSwitchContainer">
+    <div class="lang-switch-container">
         <button class="lang-switch-btn" id="langSwitchBtn" onclick="toggleLanguage()">
             <span>🌐</span> <span id="langSwitchText">中文</span>
         </button>
@@ -1804,8 +1838,6 @@
 
         function enterZenFullscreen() {
             document.body.classList.add('zen-mode');
-            const langBox = document.getElementById('langSwitchContainer') || document.querySelector('.lang-switch-container');
-            if (langBox) langBox.style.setProperty('display', 'none', 'important');
             updateFullscreenBtnUI(true);
 
             // Try native HTML5 Fullscreen API with vendor prefixes
@@ -1825,8 +1857,6 @@
 
         function exitZenFullscreen() {
             document.body.classList.remove('zen-mode');
-            const langBox = document.getElementById('langSwitchContainer') || document.querySelector('.lang-switch-container');
-            if (langBox) langBox.style.removeProperty('display');
             updateFullscreenBtnUI(false);
 
             const doc = document;
@@ -1855,11 +1885,11 @@
             document.addEventListener(evt, () => {
                 const doc = document;
                 const isNativeFs = !!(doc.fullscreenElement || doc.webkitFullscreenElement || doc.mozFullScreenElement || doc.msFullscreenElement);
-                if (!isNativeFs && document.body.classList.contains('zen-mode')) {
-                    // Only exit zen-mode if exited natively
+                if (isNativeFs) {
+                    document.body.classList.add('zen-mode');
+                    updateFullscreenBtnUI(true);
+                } else if (document.body.classList.contains('zen-mode')) {
                     document.body.classList.remove('zen-mode');
-                    const langBox = document.getElementById('langSwitchContainer') || document.querySelector('.lang-switch-container');
-                    if (langBox) langBox.style.removeProperty('display');
                     updateFullscreenBtnUI(false);
                 }
             });
