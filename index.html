@@ -11,6 +11,7 @@
             --bg-deep: #080c13;
             --bg-surface: #121926;
             --bg-card: #182232;
+            --bg-card-hover: #202c3e;
             --border-subtle: rgba(212, 175, 55, 0.18);
             --border-highlight: #d4af37;
             --gold-primary: #d4af37;
@@ -20,6 +21,57 @@
             --text-main: #f3f6fa;
             --text-muted: #8c9cb0;
             --text-gold: #e6c875;
+            --card-shadow: 0 20px 40px rgba(0, 0, 0, 0.5);
+            --card-inner-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.05);
+            --timer-card-bg: radial-gradient(circle at center, #172233 0%, var(--bg-surface) 100%);
+            --dial-bg-stroke: rgba(255, 255, 255, 0.05);
+            --dial-halo-bg: radial-gradient(circle, rgba(212, 175, 55, 0.12) 0%, transparent 70%);
+            --preset-active-bg: linear-gradient(145deg, #2a384d, #1c2635);
+            --btn-sec-bg: var(--bg-card);
+            --btn-sec-hover: #1f2b3c;
+            --btn-sec-border: rgba(255, 255, 255, 0.1);
+            --btn-sec-border-hover: rgba(255, 255, 255, 0.25);
+            --optgroup-bg: #101622;
+            --lang-btn-bg: rgba(24, 34, 50, 0.85);
+            --time-shadow: 0 4px 18px rgba(0,0,0,0.6);
+            --custom-btn-border: rgba(255,255,255,0.08);
+            --custom-btn-border-hover: rgba(255,255,255,0.2);
+            --zen-bg: #06090f;
+            --h1-shadow: 0 0 25px rgba(212, 175, 55, 0.35);
+        }
+
+        /* LITE THEME (米白色 · 典雅暖玉色调) */
+        [data-theme="light"] {
+            --bg-deep: #f8f6f0;
+            --bg-surface: #f1ede3;
+            --bg-card: #ffffff;
+            --bg-card-hover: #f5f1e8;
+            --border-subtle: rgba(184, 134, 11, 0.22);
+            --border-highlight: #b8860b;
+            --gold-primary: #a67c1e;
+            --gold-light: #7a5810;
+            --gold-glow: rgba(166, 124, 30, 0.15);
+            --coral-accent: #c85a3a;
+            --text-main: #2d2a26;
+            --text-muted: #7d7567;
+            --text-gold: #8c6314;
+            --card-shadow: 0 12px 32px rgba(135, 115, 90, 0.10);
+            --card-inner-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.8);
+            --timer-card-bg: radial-gradient(circle at center, #ffffff 0%, var(--bg-surface) 100%);
+            --dial-bg-stroke: rgba(166, 124, 30, 0.14);
+            --dial-halo-bg: radial-gradient(circle, rgba(184, 134, 11, 0.12) 0%, transparent 70%);
+            --preset-active-bg: linear-gradient(145deg, #ede5d5, #faf8f2);
+            --btn-sec-bg: #ffffff;
+            --btn-sec-hover: #eae4d5;
+            --btn-sec-border: rgba(160, 140, 110, 0.28);
+            --btn-sec-border-hover: rgba(160, 140, 110, 0.5);
+            --optgroup-bg: #eae3d2;
+            --lang-btn-bg: rgba(255, 255, 255, 0.85);
+            --time-shadow: 0 2px 8px rgba(140, 110, 60, 0.12);
+            --custom-btn-border: rgba(160, 140, 110, 0.2);
+            --custom-btn-border-hover: rgba(160, 140, 110, 0.4);
+            --zen-bg: #f8f6f0;
+            --h1-shadow: 0 2px 10px rgba(166, 124, 30, 0.18);
         }
 
         * {
@@ -40,10 +92,14 @@
             padding: 24px 16px 60px;
             overflow-x: hidden;
             background-image: radial-gradient(circle at 50% 15%, rgba(212, 175, 55, 0.06) 0%, transparent 65%);
+            transition: background-color 0.3s ease, color 0.3s ease;
+        }
+        [data-theme="light"] body {
+            background-image: radial-gradient(circle at 50% 15%, rgba(184, 134, 11, 0.08) 0%, transparent 65%);
         }
 
         
-        /* LANGUAGE SWITCHER */
+        /* TOP BAR (THEME & LANGUAGE SWITCHERS) */
         .lang-switch-container {
             display: flex;
             align-items: center;
@@ -51,9 +107,10 @@
             width: 100%;
             max-width: 680px;
             margin-bottom: 12px;
+            gap: 10px;
         }
         .lang-switch-btn {
-            background: rgba(24, 34, 50, 0.85);
+            background: var(--lang-btn-bg);
             border: 1px solid var(--border-subtle);
             color: var(--text-gold);
             padding: 6px 14px;
@@ -69,7 +126,7 @@
         .lang-switch-btn:hover {
             border-color: var(--gold-primary);
             color: var(--gold-light);
-            background: #1e293b;
+            background: var(--bg-card-hover);
         }
 
         /* HEADER */
@@ -82,7 +139,7 @@
             font-weight: 300;
             letter-spacing: 6px;
             color: var(--gold-primary);
-            text-shadow: 0 0 25px rgba(212, 175, 55, 0.35);
+            text-shadow: var(--h1-shadow);
             margin-bottom: 6px;
         }
         p.sub-title {
@@ -104,7 +161,7 @@
 
         /* TIMER DIAL SECTION */
         .timer-display-card {
-            background: radial-gradient(circle at center, #172233 0%, var(--bg-surface) 100%);
+            background: var(--timer-card-bg);
             border: 1px solid var(--border-subtle);
             border-radius: 28px;
             padding: 32px 16px;
@@ -112,9 +169,9 @@
             display: flex;
             flex-direction: column;
             align-items: center;
-            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.5), inset 0 1px 0 rgba(255,255,255,0.05);
+            box-shadow: var(--card-shadow), var(--card-inner-shadow);
             position: relative;
-            transition: border-color 0.3s ease;
+            transition: border-color 0.3s ease, background 0.3s ease, box-shadow 0.3s ease;
         }
         @media (min-width: 480px) {
             .timer-display-card {
@@ -141,7 +198,7 @@
         }
         .dial-bg {
             fill: none;
-            stroke: rgba(255, 255, 255, 0.05);
+            stroke: var(--dial-bg-stroke);
             stroke-width: 6;
         }
         .dial-progress {
@@ -158,7 +215,7 @@
             width: 240px;
             height: 240px;
             border-radius: 50%;
-            background: radial-gradient(circle, rgba(212, 175, 55, 0.12) 0%, transparent 70%);
+            background: var(--dial-halo-bg);
             pointer-events: none;
             opacity: 0;
             transition: opacity 0.5s ease;
@@ -186,7 +243,7 @@
             letter-spacing: 3px;
             font-variant-numeric: tabular-nums;
             color: var(--text-main);
-            text-shadow: 0 4px 18px rgba(0,0,0,0.6);
+            text-shadow: var(--time-shadow);
         }
         .status-badge {
             font-size: 0.86rem;
@@ -255,15 +312,15 @@
             font-weight: 400;
         }
         .preset-btn:hover {
-            background: #202c3e;
+            background: var(--bg-card-hover);
             border-color: var(--gold-primary);
             transform: translateY(-2px);
         }
         .preset-btn.active {
-            background: linear-gradient(145deg, #2a384d, #1c2635);
+            background: var(--preset-active-bg);
             border-color: var(--gold-primary);
             color: var(--gold-light);
-            box-shadow: 0 4px 15px rgba(212, 175, 55, 0.2);
+            box-shadow: 0 4px 15px var(--gold-glow);
         }
         .preset-btn.active span.unit {
             color: var(--gold-primary);
@@ -281,7 +338,7 @@
         }
         .custom-time-btn {
             background: var(--bg-card);
-            border: 1px solid rgba(255,255,255,0.08);
+            border: 1px solid var(--custom-btn-border);
             color: var(--text-muted);
             padding: 6px 14px;
             border-radius: 8px;
@@ -291,7 +348,8 @@
         }
         .custom-time-btn:hover {
             color: var(--text-main);
-            border-color: rgba(255,255,255,0.2);
+            border-color: var(--custom-btn-border-hover);
+            background: var(--bg-card-hover);
         }
         .quick-test-badge {
             background: rgba(224, 122, 95, 0.15);
@@ -300,7 +358,7 @@
         }
         .quick-test-badge:hover {
             border-color: var(--coral-accent);
-            color: #ff9e80;
+            background: rgba(224, 122, 95, 0.22);
         }
 
         /* CONTROLS (START / PAUSE / RESET) */
@@ -353,9 +411,9 @@
             transform: translateY(1px);
         }
         .btn-secondary {
-            background: var(--bg-card);
+            background: var(--btn-sec-bg);
             color: var(--text-muted);
-            border: 1px solid rgba(255, 255, 255, 0.1);
+            border: 1px solid var(--btn-sec-border);
             padding: 14px 12px;
             border-radius: 40px;
             font-size: 0.88rem;
@@ -380,8 +438,8 @@
         }
         .btn-secondary:hover {
             color: var(--text-main);
-            border-color: rgba(255, 255, 255, 0.25);
-            background: #1f2b3c;
+            border-color: var(--btn-sec-border-hover);
+            background: var(--btn-sec-hover);
         }
 
         /* SETTINGS CARD (SOUND SELECTION & VOLUME) */
@@ -394,6 +452,7 @@
             display: flex;
             flex-direction: column;
             gap: 16px;
+            box-shadow: var(--card-shadow);
         }
         .setting-row {
             display: flex;
@@ -422,7 +481,7 @@
         select.sound-select {
             background: var(--bg-card);
             color: var(--text-main);
-            border: 1px solid rgba(212, 175, 55, 0.3);
+            border: 1px solid var(--border-subtle);
             border-radius: 10px;
             padding: 10px 14px;
             font-size: 0.9rem;
@@ -435,7 +494,7 @@
             border-color: var(--gold-primary);
         }
         select.sound-select optgroup {
-            background: #101622;
+            background: var(--optgroup-bg);
             color: var(--gold-primary);
             font-weight: 600;
         }
@@ -447,7 +506,7 @@
 
         .icon-btn {
             background: var(--bg-card);
-            border: 1px solid rgba(255, 255, 255, 0.1);
+            border: 1px solid var(--btn-sec-border);
             color: var(--gold-primary);
             padding: 9px 14px;
             border-radius: 10px;
@@ -461,7 +520,7 @@
         }
         .icon-btn:hover {
             border-color: var(--gold-primary);
-            background: #212c3e;
+            background: var(--bg-card-hover);
         }
 
         /* TOGGLES ROW */
@@ -470,7 +529,7 @@
             flex-wrap: wrap;
             gap: 16px;
             padding-top: 10px;
-            border-top: 1px solid rgba(255, 255, 255, 0.06);
+            border-top: 1px solid var(--border-subtle);
             font-size: 0.85rem;
             color: var(--text-muted);
         }
@@ -491,7 +550,7 @@
         /* SOUND VAULT COLLAPSIBLE DRAWER */
         .sound-vault-toggle {
             background: transparent;
-            border: 1px dashed rgba(212, 175, 55, 0.3);
+            border: 1px dashed var(--border-subtle);
             color: var(--text-gold);
             padding: 12px 24px;
             border-radius: 30px;
@@ -506,6 +565,9 @@
         .sound-vault-toggle:hover {
             border-color: var(--gold-primary);
             background: rgba(212, 175, 55, 0.08);
+        }
+        [data-theme="light"] .sound-vault-toggle:hover {
+            background: rgba(166, 124, 30, 0.08);
         }
         .vault-container {
             width: 100%;
@@ -527,7 +589,7 @@
         .vault-category-title {
             font-size: 1.1rem;
             font-weight: 500;
-            color: #fff;
+            color: var(--text-main);
             border-left: 3px solid var(--gold-primary);
             padding-left: 10px;
             margin-bottom: 12px;
@@ -539,22 +601,23 @@
         }
         .vault-card {
             background: var(--bg-card);
-            border: 1px solid rgba(255,255,255,0.06);
+            border: 1px solid var(--border-subtle);
             border-radius: 12px;
             padding: 16px;
             display: flex;
             flex-direction: column;
             justify-content: space-between;
             gap: 12px;
-            transition: border-color 0.2s;
+            transition: border-color 0.2s, box-shadow 0.2s;
+            box-shadow: var(--card-shadow);
         }
         .vault-card:hover {
-            border-color: rgba(212, 175, 55, 0.3);
+            border-color: var(--gold-primary);
         }
         .vault-name {
             font-size: 0.96rem;
             font-weight: 500;
-            color: #fff;
+            color: var(--text-main);
         }
         .vault-desc {
             font-size: 0.8rem;
@@ -563,8 +626,8 @@
         }
         .vault-play-btn {
             background: rgba(212, 175, 55, 0.12);
-            color: var(--gold-light);
-            border: 1px solid rgba(212, 175, 55, 0.25);
+            color: var(--text-gold);
+            border: 1px solid var(--border-subtle);
             padding: 7px 12px;
             border-radius: 6px;
             font-size: 0.82rem;
@@ -577,7 +640,7 @@
         }
         .vault-play-btn:hover {
             background: var(--gold-primary);
-            color: #0b0f16;
+            color: #ffffff;
         }
 
         /* FULLSCREEN ZEN MODE OVERLAY (WORKS ON ALL MOBILES & DESKTOPS) */
@@ -586,7 +649,7 @@
             justify-content: center !important;
             align-items: center !important;
             overflow: hidden !important;
-            background: #06090f !important;
+            background: var(--zen-bg) !important;
         }
         body.zen-mode .lang-switch-container,
         body.zen-mode header,
@@ -628,6 +691,11 @@
             border-color: var(--gold-primary);
             color: var(--gold-light);
         }
+        [data-theme="light"] body.zen-mode #fullscreenBtn {
+            background: rgba(166, 124, 30, 0.12);
+            border-color: var(--gold-primary);
+            color: var(--gold-primary);
+        }
 
         footer {
             margin-top: 40px;
@@ -641,7 +709,10 @@
 <body>
 
     <div class="lang-switch-container">
-        <button class="lang-switch-btn" id="langSwitchBtn" onclick="toggleLanguage()">
+        <button class="lang-switch-btn" id="themeSwitchBtn" onclick="toggleTheme()" title="Switch Theme">
+            <span id="themeSwitchIcon">☀️</span> <span id="themeSwitchText">Lite</span>
+        </button>
+        <button class="lang-switch-btn" id="langSwitchBtn" onclick="toggleLanguage()" title="Language">
             <span>🌐</span> <span id="langSwitchText">中文</span>
         </button>
     </div>
@@ -660,9 +731,9 @@
                 <svg class="dial-svg" viewBox="0 0 300 300">
                     <defs>
                         <linearGradient id="goldGradient" x1="0%" y1="0%" x2="100%" y2="100%">
-                            <stop offset="0%" stop-color="#f5df8b" />
-                            <stop offset="50%" stop-color="#d4af37" />
-                            <stop offset="100%" stop-color="#9a7b1c" />
+                            <stop id="gradStop1" offset="0%" stop-color="#f5df8b" />
+                            <stop id="gradStop2" offset="50%" stop-color="#d4af37" />
+                            <stop id="gradStop3" offset="100%" stop-color="#9a7b1c" />
                         </linearGradient>
                     </defs>
                     <circle class="dial-bg" cx="150" cy="150" r="135" />
@@ -812,6 +883,8 @@
         // --- INTERNATIONALIZATION (I18N) DICTIONARY ---
         const I18N = {
             en: {
+                themeDark: "Dark",
+                themeLight: "Lite",
                 langBtn: "中文",
                 title: "Meditation Timer",
                 subtitle: "MINDFULNESS & INNER PEACE · ALL IS SILENT",
@@ -984,6 +1057,8 @@
                 ]
             },
             zh: {
+                themeDark: "深色",
+                themeLight: "米白",
                 langBtn: "English",
                 title: "禅 修 计 时 器",
                 subtitle: "MEDITATION TIMER · 万籁俱寂 · 一念清净",
@@ -1175,6 +1250,9 @@
         let intervalStatusTimeout = null;
 
         // DOM Elements
+        const themeSwitchBtn = document.getElementById('themeSwitchBtn');
+        const themeSwitchIcon = document.getElementById('themeSwitchIcon');
+        const themeSwitchText = document.getElementById('themeSwitchText');
         const langSwitchText = document.getElementById('langSwitchText');
         const headerTitle = document.getElementById('headerTitle');
         const headerSubtitle = document.getElementById('headerSubtitle');
@@ -1223,12 +1301,62 @@
         progressCircle.style.strokeDasharray = CIRCUMFERENCE;
         progressCircle.style.strokeDashoffset = 0;
 
+        // --- THEME ENGINE (DARK ZEN vs LITE 米白) ---
+        let currentTheme = localStorage.getItem('meditation_timer_theme') || 'dark';
+
+        function applyTheme(theme) {
+            currentTheme = theme;
+            localStorage.setItem('meditation_timer_theme', theme);
+            if (theme === 'light') {
+                document.documentElement.setAttribute('data-theme', 'light');
+            } else {
+                document.documentElement.removeAttribute('data-theme');
+            }
+            // SVG gradient stops update for all mobile/desktop browsers
+            const grad1 = document.getElementById('gradStop1');
+            const grad2 = document.getElementById('gradStop2');
+            const grad3 = document.getElementById('gradStop3');
+            if (grad1 && grad2 && grad3) {
+                if (theme === 'light') {
+                    grad1.setAttribute('stop-color', '#c99826');
+                    grad2.setAttribute('stop-color', '#a67c1e');
+                    grad3.setAttribute('stop-color', '#7d5b12');
+                } else {
+                    grad1.setAttribute('stop-color', '#f5df8b');
+                    grad2.setAttribute('stop-color', '#d4af37');
+                    grad3.setAttribute('stop-color', '#9a7b1c');
+                }
+            }
+            updateThemeButtonText();
+        }
+
+        function updateThemeButtonText() {
+            const t = I18N[currentLang];
+            if (!themeSwitchIcon || !themeSwitchText || !t) return;
+            if (currentTheme === 'light') {
+                themeSwitchIcon.textContent = "🌙";
+                themeSwitchText.textContent = t.themeDark;
+                if (themeSwitchBtn) themeSwitchBtn.title = currentLang === 'en' ? "Switch to Dark Mode" : "切换为深色模式";
+            } else {
+                themeSwitchIcon.textContent = "☀️";
+                themeSwitchText.textContent = t.themeLight;
+                if (themeSwitchBtn) themeSwitchBtn.title = currentLang === 'en' ? "Switch to Lite Mode (米白)" : "切换为米白浅色模式";
+            }
+        }
+
+        function toggleTheme() {
+            applyTheme(currentTheme === 'light' ? 'dark' : 'light');
+        }
+
         // --- I18N RENDER ENGINE ---
         function applyLanguage(lang) {
             currentLang = lang;
             localStorage.setItem('meditation_timer_lang', lang);
             document.documentElement.lang = lang === 'en' ? 'en' : 'zh-CN';
             const t = I18N[lang];
+
+            // Update theme switch button text for current language
+            updateThemeButtonText();
 
             // Header & language switch button
             langSwitchText.textContent = t.langBtn;
@@ -1959,7 +2087,8 @@
             }
         });
 
-        // Initial setup with English default
+        // Initial setup with English default & theme
+        applyTheme(currentTheme);
         applyLanguage(currentLang);
         updateDisplay();
     </script>
