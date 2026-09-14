@@ -1326,8 +1326,32 @@
         // --- CONSTANTS & STATE ---
         const CIRCUMFERENCE = 2 * Math.PI * 135; // 848.23
         let timerInterval = null;
+
+        // Restore saved duration and preset (Remember user choice)
+        let savedPresetMin = localStorage.getItem('meditation_timer_preset_minutes');
+        let savedTotalSec = localStorage.getItem('meditation_timer_total_seconds');
+
         let selectedPresetMinutes = 15; // Baseline preset
         let totalSeconds = 15 * 60; // default 15 min
+
+        if (savedPresetMin) {
+            if (savedPresetMin === 'custom') {
+                totalSeconds = savedTotalSec ? parseInt(savedTotalSec, 10) : 15 * 60;
+                selectedPresetMinutes = 15;
+            } else {
+                const pMin = parseInt(savedPresetMin, 10);
+                if (!isNaN(pMin) && pMin > 0) {
+                    selectedPresetMinutes = pMin;
+                    totalSeconds = pMin * 60;
+                }
+            }
+        } else if (savedTotalSec) {
+            const sec = parseInt(savedTotalSec, 10);
+            if (!isNaN(sec) && sec > 0) {
+                totalSeconds = sec;
+                selectedPresetMinutes = Math.round(sec / 60) || 15;
+            }
+        }
         let remainingSeconds = totalSeconds;
         let targetEndTime = 0; // Wall-clock timestamp for 100% accurate countdown on mobile
         let isRunning = false;
@@ -1384,6 +1408,36 @@
         const intervalAudioPlayer = document.getElementById('intervalAudioPlayer');
         const startAudioPlayer = document.getElementById('startAudioPlayer');
         const silentAudioPlayer = document.getElementById('silentAudioPlayer');
+
+        // Restore saved checkbox preferences (Remember user choice)
+        const savedKeepScreen = localStorage.getItem('meditation_timer_keep_screen');
+        if (savedKeepScreen !== null && keepScreenOnCheckbox) {
+            keepScreenOnCheckbox.checked = (savedKeepScreen === 'true');
+        }
+
+        const savedAutoLoop = localStorage.getItem('meditation_timer_auto_loop');
+        if (savedAutoLoop !== null && autoLoopSoundCheckbox) {
+            autoLoopSoundCheckbox.checked = (savedAutoLoop === 'true');
+        }
+
+        // Synchronize preset button highlights and tip text with current state
+        function syncPresetUI() {
+            const t = I18N[currentLang];
+            const isCustom = (localStorage.getItem('meditation_timer_preset_minutes') === 'custom');
+            let hasActive = false;
+            presetBtns.forEach(b => {
+                const btnMin = parseInt(b.getAttribute('data-minutes'), 10);
+                const isSelected = (!isCustom && btnMin === selectedPresetMinutes && totalSeconds === selectedPresetMinutes * 60);
+                b.classList.toggle('active', isSelected);
+                if (isSelected) {
+                    hasActive = true;
+                    if (currentPresetTip) currentPresetTip.textContent = t.presetCurrent(btnMin);
+                }
+            });
+            if (!hasActive && currentPresetTip) {
+                currentPresetTip.textContent = totalSeconds < 60 ? t.customCurrentSec(totalSeconds) : t.customCurrentMin(Math.round(totalSeconds / 60));
+            }
+        }
 
         // Init Progress stroke
         progressCircle.style.strokeDasharray = CIRCUMFERENCE;
@@ -1480,18 +1534,7 @@
 
             // Presets & Adjustments
             presetLabel.textContent = t.presetLabel;
-            if (presetBtns) {
-                let hasActive = false;
-                presetBtns.forEach(b => {
-                    if (b.classList.contains('active')) {
-                        hasActive = true;
-                        currentPresetTip.textContent = t.presetCurrent(b.getAttribute('data-minutes'));
-                    }
-                });
-                if (!hasActive) {
-                    currentPresetTip.textContent = totalSeconds < 60 ? t.customCurrentSec(totalSeconds) : t.customCurrentMin(Math.round(totalSeconds / 60));
-                }
-            }
+            syncPresetUI();
 
             adjMinus5.textContent = t.adjMinus5;
             adjMinus1.textContent = t.adjMinus1;
@@ -1535,6 +1578,7 @@
 
         function populateOptionsList(selectElement, optionsList, currentValue) {
             selectElement.innerHTML = "";
+            let matched = false;
             optionsList.forEach(item => {
                 if (item.group && Array.isArray(item.options)) {
                     const optgroup = document.createElement('optgroup');
@@ -1543,7 +1587,10 @@
                         const option = document.createElement('option');
                         option.value = opt.value;
                         option.textContent = opt.text;
-                        if (opt.value === currentValue) option.selected = true;
+                        if (opt.value === currentValue) {
+                            option.selected = true;
+                            matched = true;
+                        }
                         optgroup.appendChild(option);
                     });
                     selectElement.appendChild(optgroup);
@@ -1551,25 +1598,36 @@
                     const option = document.createElement('option');
                     option.value = item.value;
                     option.textContent = item.text;
-                    if (item.value === currentValue) option.selected = true;
+                    if (item.value === currentValue) {
+                        option.selected = true;
+                        matched = true;
+                    }
                     selectElement.appendChild(option);
                 }
             });
+            if (matched) {
+                selectElement.value = currentValue;
+            } else if (selectElement.options.length > 0) {
+                selectElement.selectedIndex = 0;
+            }
         }
 
         function populateSoundSelects(lang) {
             const t = I18N[lang];
+            const savedEnd = localStorage.getItem('meditation_timer_end_sound');
+            const savedStart = localStorage.getItem('meditation_timer_start_sound');
+            const savedInterval = localStorage.getItem('meditation_timer_interval_sound');
 
-            // 1. Ending Sound Select
-            const currentEndVal = endSoundSelect.value || "sounds/daqing_3strikes_01_ancient_bronze.mp3";
+            // 1. Ending Sound Select (Remember user selection)
+            const currentEndVal = endSoundSelect.value || savedEnd || "sounds/daqing_3strikes_01_ancient_bronze.mp3";
             populateOptionsList(endSoundSelect, t.endSoundOptions, currentEndVal);
 
-            // 2. Start Sound Select
-            const currentStartVal = startSoundSelect.value || "none";
+            // 2. Start Sound Select (Remember user selection)
+            const currentStartVal = startSoundSelect.value || savedStart || "none";
             populateOptionsList(startSoundSelect, t.startSoundOptions, currentStartVal);
 
-            // 3. Interval Sound Select
-            const currentIntervalVal = intervalSoundSelect.value || "none";
+            // 3. Interval Sound Select (Remember user selection)
+            const currentIntervalVal = intervalSoundSelect.value || savedInterval || "none";
             populateOptionsList(intervalSoundSelect, t.intervalSoundOptions, currentIntervalVal);
         }
 
@@ -1718,6 +1776,8 @@
                 selectedPresetMinutes = minutes;
                 presetBtns.forEach(b => b.classList.toggle('active', b === btn));
                 totalSeconds = minutes * 60;
+                localStorage.setItem('meditation_timer_preset_minutes', minutes.toString());
+                localStorage.setItem('meditation_timer_total_seconds', totalSeconds.toString());
                 const t = I18N[currentLang];
                 currentPresetTip.textContent = t.presetCurrent(minutes);
                 resetTimer(false);
@@ -1727,6 +1787,8 @@
         function adjustTime(deltaSeconds) {
             totalSeconds = Math.max(10, (isRunning ? remainingSeconds : totalSeconds) + deltaSeconds);
             presetBtns.forEach(b => b.classList.remove('active'));
+            localStorage.setItem('meditation_timer_preset_minutes', 'custom');
+            localStorage.setItem('meditation_timer_total_seconds', totalSeconds.toString());
             const t = I18N[currentLang];
             currentPresetTip.textContent = totalSeconds < 60 ? t.customCurrentSec(totalSeconds) : t.customCurrentMin(Math.round(totalSeconds / 60));
             resetTimer(false);
@@ -1735,6 +1797,8 @@
         function setExactSeconds(sec) {
             totalSeconds = sec;
             presetBtns.forEach(b => b.classList.remove('active'));
+            localStorage.setItem('meditation_timer_preset_minutes', 'custom');
+            localStorage.setItem('meditation_timer_total_seconds', totalSeconds.toString());
             const t = I18N[currentLang];
             currentPresetTip.textContent = sec < 60 ? t.testCurrentSec(sec) : t.testCurrentMin(Math.round(sec / 60));
             resetTimer(false);
@@ -1868,6 +1932,8 @@
                     b.classList.toggle('active', parseInt(b.getAttribute('data-minutes'), 10) === selectedPresetMinutes);
                 });
                 currentPresetTip.textContent = t.presetCurrent(selectedPresetMinutes);
+                localStorage.setItem('meditation_timer_preset_minutes', selectedPresetMinutes.toString());
+                localStorage.setItem('meditation_timer_total_seconds', totalSeconds.toString());
             }
 
             remainingSeconds = totalSeconds;
@@ -1986,6 +2052,41 @@
                 previewIntervalSoundBtn.innerHTML = `<span>▶</span> <span class="preview-text">${t.previewBtn}</span>`;
             }
             isPreviewing = false;
+        }
+
+        // --- PERSISTENCE: SAVE USER CHOICES ON INTERACTION ---
+        if (endSoundSelect) {
+            endSoundSelect.addEventListener('change', () => {
+                localStorage.setItem('meditation_timer_end_sound', endSoundSelect.value);
+            });
+        }
+        if (startSoundSelect) {
+            startSoundSelect.addEventListener('change', () => {
+                localStorage.setItem('meditation_timer_start_sound', startSoundSelect.value);
+            });
+        }
+        if (intervalSoundSelect) {
+            intervalSoundSelect.addEventListener('change', () => {
+                localStorage.setItem('meditation_timer_interval_sound', intervalSoundSelect.value);
+            });
+        }
+        if (keepScreenOnCheckbox) {
+            keepScreenOnCheckbox.addEventListener('change', () => {
+                localStorage.setItem('meditation_timer_keep_screen', keepScreenOnCheckbox.checked);
+                if (!keepScreenOnCheckbox.checked) {
+                    releaseWakeLock();
+                } else if (isRunning && !isPaused) {
+                    acquireWakeLock();
+                }
+            });
+        }
+        if (autoLoopSoundCheckbox) {
+            autoLoopSoundCheckbox.addEventListener('change', () => {
+                localStorage.setItem('meditation_timer_auto_loop', autoLoopSoundCheckbox.checked);
+                if (globalAudioPlayer) {
+                    globalAudioPlayer.loop = autoLoopSoundCheckbox.checked;
+                }
+            });
         }
 
         // Preview End Bell button
