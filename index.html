@@ -1,11 +1,11 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="zh-CN">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-    <title>Meditation Timer · 禅修计时器</title>
+    <title>禅修计时器 · Meditation Timer</title>
     <style>
         :root {
             --bg-deep: #080c13;
@@ -709,17 +709,17 @@
 <body>
 
     <div class="lang-switch-container">
-        <button class="lang-switch-btn" id="themeSwitchBtn" onclick="toggleTheme()" title="Switch Theme">
-            <span id="themeSwitchIcon">☀️</span> <span id="themeSwitchText">Lite</span>
+        <button class="lang-switch-btn" id="themeSwitchBtn" onclick="toggleTheme()" title="切换为米白浅色模式">
+            <span id="themeSwitchIcon">☀️</span> <span id="themeSwitchText">米白</span>
         </button>
-        <button class="lang-switch-btn" id="langSwitchBtn" onclick="toggleLanguage()" title="Language">
-            <span>🌐</span> <span id="langSwitchText">中文</span>
+        <button class="lang-switch-btn" id="langSwitchBtn" onclick="toggleLanguage()" title="语言切换 / Language">
+            <span>🌐</span> <span id="langSwitchText">English</span>
         </button>
     </div>
 
     <header>
-        <h1 id="headerTitle">Meditation Timer</h1>
-        <p class="sub-title" id="headerSubtitle">MINDFULNESS & INNER PEACE · ALL IS SILENT</p>
+        <h1 id="headerTitle">禅 修 计 时 器</h1>
+        <p class="sub-title" id="headerSubtitle">MEDITATION TIMER · 万籁俱寂 · 一念清净</p>
     </header>
 
     <main class="app-container">
@@ -744,27 +744,27 @@
                     <div class="time-text" id="timeDisplay">15:00</div>
                     <div class="status-badge" id="statusBadge">
                         <span class="status-dot"></span>
-                        <span id="statusText">Ready to Begin</span>
+                        <span id="statusText">静待启修</span>
                     </div>
                 </div>
             </div>
 
             <!-- CONTROLS: START / PAUSE / RESET -->
             <div class="controls-row">
-                <button class="btn-secondary" id="resetBtn" title="Reset Timer">Reset</button>
+                <button class="btn-secondary" id="resetBtn" title="重 置">重 置</button>
                 <button class="btn-primary" id="startBtn">
                     <span id="startBtnIcon">▶</span>
-                    <span id="startBtnText">Start</span>
+                    <span id="startBtnText">开 始</span>
                 </button>
-                <button class="btn-secondary" id="fullscreenBtn" title="Zen Fullscreen Mode">Fullscreen</button>
+                <button class="btn-secondary" id="fullscreenBtn" title="全 屏">全 屏</button>
             </div>
         </div>
 
         <!-- 2. PRESET TIMER BUTTONS -->
         <div class="preset-section">
             <div class="section-label">
-                <span id="presetLabel">Meditation Duration (Presets)</span>
-                <span id="currentPresetTip">Current: 15 min</span>
+                <span id="presetLabel">预设静坐时长 (PRESETS)</span>
+                <span id="currentPresetTip">当前: 15 分钟</span>
             </div>
             <div class="preset-grid">
                 <button class="preset-btn active" data-minutes="15">
@@ -795,12 +795,12 @@
 
             <!-- Custom adjustments & Quick test -->
             <div class="custom-time-row">
-                <button class="custom-time-btn" id="adjMinus5" onclick="adjustTime(-300)">- 5 min</button>
-                <button class="custom-time-btn" id="adjMinus1" onclick="adjustTime(-60)">- 1 min</button>
-                <button class="custom-time-btn" id="adjPlus1" onclick="adjustTime(60)">+ 1 min</button>
-                <button class="custom-time-btn" id="adjPlus5" onclick="adjustTime(300)">+ 5 min</button>
-                <button class="custom-time-btn quick-test-badge" id="test10s" onclick="setExactSeconds(10)" title="Test Ending Bell">⚡ Test 10s</button>
-                <button class="custom-time-btn quick-test-badge" id="test1m" onclick="setExactSeconds(60)" title="Test 1 Minute">⚡ 1 min</button>
+                <button class="custom-time-btn" id="adjMinus5" onclick="adjustTime(-300)">- 5 分钟</button>
+                <button class="custom-time-btn" id="adjMinus1" onclick="adjustTime(-60)">- 1 分钟</button>
+                <button class="custom-time-btn" id="adjPlus1" onclick="adjustTime(60)">+ 1 分钟</button>
+                <button class="custom-time-btn" id="adjPlus5" onclick="adjustTime(300)">+ 5 分钟</button>
+                <button class="custom-time-btn quick-test-badge" id="test10s" onclick="setExactSeconds(10)" title="测试时钟响铃">⚡ 测试 10 秒</button>
+                <button class="custom-time-btn quick-test-badge" id="test1m" onclick="setExactSeconds(60)" title="测试1分钟">⚡ 1 分钟</button>
             </div>
         </div>
 
@@ -808,39 +808,39 @@
         <div class="settings-card">
             <div class="setting-row">
                 <div class="setting-label">
-                    <span id="endSoundLabel">🔔 Ending Bell (Conclusion)</span>
+                    <span id="endSoundLabel">🔔 结束提示音 (出定之声)</span>
                 </div>
                 <div class="setting-controls">
                     <select class="sound-select" id="endSoundSelect">
                     </select>
-                    <button class="icon-btn" id="previewSoundBtn" title="Preview Sound">
-                        <span>▶</span> <span class="preview-text">Preview</span>
+                    <button class="icon-btn" id="previewSoundBtn" title="试听">
+                        <span>▶</span> <span class="preview-text">试听</span>
                     </button>
                 </div>
             </div>
 
             <div class="setting-row">
                 <div class="setting-label">
-                    <span id="startSoundLabel">🥢 Starting Chime (Beginning)</span>
+                    <span id="startSoundLabel">🥢 起修提示音 (开始时敲击)</span>
                 </div>
                 <div class="setting-controls">
                     <select class="sound-select" id="startSoundSelect">
                     </select>
-                    <button class="icon-btn" id="previewStartSoundBtn" title="Preview Sound">
-                        <span>▶</span> <span class="preview-text">Preview</span>
+                    <button class="icon-btn" id="previewStartSoundBtn" title="试听">
+                        <span>▶</span> <span class="preview-text">试听</span>
                     </button>
                 </div>
             </div>
 
             <div class="setting-row">
                 <div class="setting-label">
-                    <span id="intervalSoundLabel">⏱️ Interval Chime (>15 min)</span>
+                    <span id="intervalSoundLabel">⏱️ 间歇提示音 (超过15分钟时)</span>
                 </div>
                 <div class="setting-controls">
                     <select class="sound-select" id="intervalSoundSelect">
                     </select>
-                    <button class="icon-btn" id="previewIntervalSoundBtn" title="Preview Sound">
-                        <span>▶</span> <span class="preview-text">Preview</span>
+                    <button class="icon-btn" id="previewIntervalSoundBtn" title="试听">
+                        <span>▶</span> <span class="preview-text">试听</span>
                     </button>
                 </div>
             </div>
@@ -848,18 +848,18 @@
             <div class="toggles-row">
                 <label class="toggle-item">
                     <input type="checkbox" id="keepScreenOn" checked>
-                    <span id="keepScreenLabel">Keep Screen Awake</span>
+                    <span id="keepScreenLabel">保持屏幕常亮 (防止息屏)</span>
                 </label>
                 <label class="toggle-item">
                     <input type="checkbox" id="autoLoopSound">
-                    <span id="autoLoopLabel">Loop Ending Sound</span>
+                    <span id="autoLoopLabel">出定声循环播放 (直到手动关闭)</span>
                 </label>
             </div>
         </div>
 
         <!-- 4. SOUND VAULT BUTTON -->
         <button class="sound-vault-toggle" id="toggleVaultBtn">
-            <span>📚</span> <span id="toggleVaultText">Explore Acoustic Sound Vault (35+ Master Tracks)</span>
+            <span>📚</span> <span id="toggleVaultText">展开全部禅音品鉴库 (35+ 款原生音效)</span>
         </button>
 
         <!-- 5. COLLAPSIBLE SOUND VAULT -->
@@ -870,7 +870,7 @@
     </main>
 
     <footer>
-        <p id="footerText">Meditation Timer · Procedural Acoustic Synthesis · 48kHz Master Studio Quality</p>
+        <p id="footerText">禅修计时器 · 专业声学生成 · 48kHz 无损录音室母带品质</p>
     </footer>
 
     <!-- AUDIO ELEMENTS WITH MOBILE SUPPORT -->
@@ -1320,8 +1320,8 @@
             }
         };
 
-        // Current Language State (Default English as requested, saved in localStorage)
-        let currentLang = localStorage.getItem('meditation_timer_lang') || 'en';
+        // Current Language State (Default Chinese as requested, saved in localStorage)
+        let currentLang = localStorage.getItem('meditation_timer_lang_v2') || 'zh';
 
         // --- CONSTANTS & STATE ---
         const CIRCUMFERENCE = 2 * Math.PI * 135; // 848.23
@@ -1439,6 +1439,7 @@
         // --- I18N RENDER ENGINE ---
         function applyLanguage(lang) {
             currentLang = lang;
+            localStorage.setItem('meditation_timer_lang_v2', lang);
             localStorage.setItem('meditation_timer_lang', lang);
             document.documentElement.lang = lang === 'en' ? 'en' : 'zh-CN';
             const t = I18N[lang];
@@ -2178,7 +2179,7 @@
             }
         });
 
-        // Initial setup with English default & theme
+        // Initial setup with Chinese default & theme
         applyTheme(currentTheme);
         applyLanguage(currentLang);
         updateDisplay();
