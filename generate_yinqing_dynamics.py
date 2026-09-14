@@ -1,50 +1,50 @@
 #!/usr/bin/env python3
 """
-Generate 5 Yinqing bell sounds across 3 dynamics:
-- small (小声 / Soft, peak ~0.28, -11 dBFS, gentle strike transient)
-- medium (中声 / Medium, peak ~0.55, -5.2 dBFS, standard strike transient)
-- loud (大声 / Loud, peak ~0.90, -0.9 dBFS, bright crisp strike transient)
+Generate 5 Yinqing bell sounds across 3 distinctly graded dynamics:
+- small  (小声 / Soft):   Body RMS ~ -30.5 dBFS, Peak ~ -18.5 dBFS (gentle, quiet, whisper strike)
+- medium (中声 / Medium): Body RMS ~ -20.4 dBFS, Peak ~ -8.0 dBFS  (+10 dB louder, balanced presence)
+- loud   (大声 / Loud):   Body RMS ~ -11.4 dBFS, Peak ~ -0.9 dBFS  (+9 dB louder, full powerful ringing)
 
 Total: 5 types * 3 dynamics = 15 tracks.
-Also encodes to high-quality MP3 (192kbps) with ffmpeg.
+Encodes to high-quality MP3 (192kbps) using ffmpeg.
 """
 
 import os
+import wave
 import subprocess
 import numpy as np
-from scipy.io import wavfile
 
 SAMPLE_RATE = 48000
 
-# Dynamics config: (volume_suffix, peak_target, strike_factor, en_label, zh_label)
+# Dynamics config: (volume_suffix, target_body_rms, strike_factor, en_label, zh_label)
 DYNAMICS = [
-    ("small", 0.28, 0.40, "Soft", "小声"),
-    ("medium", 0.55, 0.70, "Medium", "中声"),
-    ("loud", 0.90, 1.00, "Loud", "大声"),
+    ("small", 0.030, 0.25, "Soft", "小声"),
+    ("medium", 0.095, 0.55, "Medium", "中声"),
+    ("loud", 0.270, 1.00, "Loud", "大声"),
 ]
 
 def create_metallic_strike(strike_type="metal", intensity=1.0, sample_rate=SAMPLE_RATE):
     """
-    Simulates strike impact. intensity controls both transient sharpness and higher harmonics.
+    Simulates strike impact transient.
     """
-    duration = 0.04
+    duration = 0.035
     total_samples = int(duration * sample_rate)
     t = np.linspace(0, duration, total_samples, endpoint=False)
     noise = np.random.normal(0, 1, total_samples)
 
     if strike_type == "metal":
-        decay = 150 + 90 * intensity
+        decay = 180 + 120 * intensity
         env = np.exp(-t * decay)
-        clink = (np.sin(2 * np.pi * 5800 * t) * (0.3 + 0.3 * intensity) + 
-                 np.sin(2 * np.pi * 8400 * t) * (0.2 + 0.3 * intensity) + 
-                 noise * (0.15 + 0.2 * intensity)) * env
-        return clink * (0.18 + 0.22 * intensity)
+        clink = (np.sin(2 * np.pi * 5800 * t) * (0.25 + 0.35 * intensity) + 
+                 np.sin(2 * np.pi * 8400 * t) * (0.15 + 0.35 * intensity) + 
+                 noise * (0.10 + 0.20 * intensity)) * env
+        return clink * (0.12 + 0.25 * intensity)
     else:  # soft / warm striker
-        decay = 100 + 60 * intensity
+        decay = 120 + 80 * intensity
         env = np.exp(-t * decay)
-        clink = (np.sin(2 * np.pi * 3200 * t) * (0.4 + 0.3 * intensity) + 
-                 noise * (0.1 + 0.15 * intensity)) * env
-        return clink * (0.15 + 0.18 * intensity)
+        clink = (np.sin(2 * np.pi * 3200 * t) * (0.35 + 0.30 * intensity) + 
+                 noise * (0.08 + 0.12 * intensity)) * env
+        return clink * (0.10 + 0.18 * intensity)
 
 def synthesize_yinqing_single_strike(base_freq, duration, modes_config, strike_type="metal", intensity=1.0, pan_center=0.0):
     total_samples = int(duration * SAMPLE_RATE)
@@ -56,7 +56,7 @@ def synthesize_yinqing_single_strike(base_freq, duration, modes_config, strike_t
     for (ratio, amp, decay_sec, pan_off, beat_hz, beat_depth) in modes_config:
         freq = base_freq * ratio
         # Non-linear excitation: higher partials excite more strongly when struck harder
-        harmonic_scale = 1.0 if ratio <= 1.05 else (0.5 + 0.5 * intensity)
+        harmonic_scale = 1.0 if ratio <= 1.05 else (0.45 + 0.55 * intensity)
         env = np.exp(-t / max(0.05, decay_sec) * 3.8)
         
         if beat_hz > 0:
@@ -65,12 +65,12 @@ def synthesize_yinqing_single_strike(base_freq, duration, modes_config, strike_t
             mod = 1.0
             
         phase = np.random.uniform(0, 2 * np.pi)
-        wave = np.sin(2 * np.pi * freq * t + phase) * env * mod * amp * harmonic_scale
+        wave_comp = np.sin(2 * np.pi * freq * t + phase) * env * mod * amp * harmonic_scale
         
         pan = np.clip(pan_center + pan_off, -1.0, 1.0)
         angle = (pan + 1.0) * (np.pi / 4)
-        left += wave * np.cos(angle)
-        right += wave * np.sin(angle)
+        left += wave_comp * np.cos(angle)
+        right += wave_comp * np.sin(angle)
         
     strike = create_metallic_strike(strike_type=strike_type, intensity=intensity)
     strike_len = min(len(strike), total_samples)
@@ -176,22 +176,22 @@ def gen_5_harmonic_528(intensity=1.0):
     right = np.zeros(total_samples, dtype=np.float64)
     
     for (freq, amp, decay_sec, pan, beat_hz, beat_depth) in modes:
-        harmonic_scale = 1.0 if freq <= 600.0 else (0.5 + 0.5 * intensity)
+        harmonic_scale = 1.0 if freq <= 600.0 else (0.45 + 0.55 * intensity)
         env = np.exp(-t / decay_sec * 3.6)
         if beat_hz > 0:
             mod = 1.0 - beat_depth * 0.5 * (1.0 - np.cos(2 * np.pi * beat_hz * t))
         else:
             mod = 1.0
         phase = np.random.uniform(0, 2 * np.pi)
-        wave = np.sin(2 * np.pi * freq * t + phase) * env * mod * amp * harmonic_scale
+        wave_comp = np.sin(2 * np.pi * freq * t + phase) * env * mod * amp * harmonic_scale
         angle = (pan + 1.0) * (np.pi / 4)
-        left += wave * np.cos(angle)
-        right += wave * np.sin(angle)
+        left += wave_comp * np.cos(angle)
+        right += wave_comp * np.sin(angle)
         
     strike = create_metallic_strike(strike_type="soft", intensity=intensity)
     strike_len = min(len(strike), total_samples)
-    left[:strike_len] += strike[:strike_len] * 0.7
-    right[:strike_len] += strike[:strike_len] * 0.7
+    left[:strike_len] += strike[:strike_len] * 0.6
+    right[:strike_len] += strike[:strike_len] * 0.6
     
     fade_len = int(0.8 * SAMPLE_RATE)
     fade_out = np.linspace(1.0, 0.0, fade_len)
@@ -208,37 +208,74 @@ GENERATORS = [
     ("yinqing_05_harmonic_528", gen_5_harmonic_528),
 ]
 
-def save_and_convert(wav_path, mp3_path, left, right, target_peak):
-    stereo = np.column_stack([left, right])
+def soft_limit(stereo, max_peak=0.92):
+    """
+    Smooth limiter that gently compresses only peaks above 0.70 without clipping or distorting.
+    """
     peak = np.max(np.abs(stereo))
-    if peak > 0:
-        stereo = stereo * (target_peak / peak)
-    int16_data = (stereo * 32767.0).astype(np.int16)
-    wavfile.write(wav_path, SAMPLE_RATE, int16_data)
+    if peak > max_peak:
+        threshold = 0.70
+        mask = np.abs(stereo) > threshold
+        excess = (np.abs(stereo) - threshold) / (peak - threshold)
+        compressed = threshold + (max_peak - threshold) * np.tanh(excess * 1.6)
+        out = stereo.copy()
+        out[mask] = np.sign(stereo[mask]) * compressed[mask]
+        return out
+    return stereo
+
+def write_wav_file(wav_path, stereo_float):
+    int16_data = np.clip(stereo_float * 32767.0, -32768, 32767).astype(np.int16)
+    with wave.open(wav_path, 'wb') as wf:
+        wf.setnchannels(2)
+        wf.setsampwidth(2)
+        wf.setframerate(SAMPLE_RATE)
+        wf.writeframes(int16_data.tobytes())
+
+def save_and_convert(wav_path, mp3_path, stereo_signal):
+    write_wav_file(wav_path, stereo_signal)
     
     # ffmpeg convert to 192k mp3
     cmd = [
-        "/opt/homebrew/bin/ffmpeg", "-y", "-i", wav_path,
+        "ffmpeg", "-y", "-i", wav_path,
         "-codec:a", "libmp3lame", "-b:a", "192k", mp3_path
     ]
     subprocess.run(cmd, stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL, check=True)
-    print(f"  ✓ {os.path.basename(mp3_path)} (peak={target_peak:.2f})")
+    if os.path.exists(wav_path):
+        os.remove(wav_path)
 
 def main():
     sounds_dir = os.path.join(os.path.dirname(__file__), "sounds")
     os.makedirs(sounds_dir, exist_ok=True)
     
-    print("🔔 开始为5款引磬生成3种声调（小声、中声、大声）...")
+    print("🔔 开始为5款引磬重构3种声调（精准声学响度分级，小声/中声/大声差距明显）...")
     
     for base_name, gen_func in GENERATORS:
         print(f"\n正在处理: {base_name}")
-        for dyn_suffix, peak_target, strike_factor, en_label, zh_label in DYNAMICS:
+        for dyn_suffix, target_body_rms, strike_factor, en_label, zh_label in DYNAMICS:
             l, r = gen_func(intensity=strike_factor)
+            stereo = np.column_stack([l, r])
+            
+            # Measure sustain body RMS (0.1s to 2.5s)
+            body = stereo[int(0.10 * SAMPLE_RATE):int(2.5 * SAMPLE_RATE)]
+            cur_body_rms = np.sqrt(np.mean(body**2))
+            
+            # Scale directly by target Body RMS
+            gain = target_body_rms / max(1e-6, cur_body_rms)
+            scaled = stereo * gain
+            
+            # Soft limit transient to max 0.92 (-0.7 dBFS)
+            limited = soft_limit(scaled, max_peak=0.92)
+            
             wav_path = os.path.join(sounds_dir, f"{base_name}_{dyn_suffix}.wav")
             mp3_path = os.path.join(sounds_dir, f"{base_name}_{dyn_suffix}.mp3")
-            save_and_convert(wav_path, mp3_path, l, r, target_peak=peak_target)
+            save_and_convert(wav_path, mp3_path, limited)
+            
+            peak = np.max(np.abs(limited))
+            b = limited[int(0.10 * SAMPLE_RATE):int(2.5 * SAMPLE_RATE)]
+            measured_body_rms = np.sqrt(np.mean(b**2))
+            print(f"  ✓ {dyn_suffix:<6} ({zh_label}): Peak={peak:.3f} ({20*np.log10(peak):>5.1f} dBFS) | Body RMS={measured_body_rms:.3f} ({20*np.log10(measured_body_rms):>5.1f} dBFS)")
 
-    print("\n🎉 全部 15 首引磬音频（小声、中声、大声）生成与转码完毕！")
+    print("\n🎉 全部 15 首引磬音频（小声、中声、大声）重新生成与转码完毕！")
 
 if __name__ == "__main__":
     main()

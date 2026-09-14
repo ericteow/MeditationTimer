@@ -1639,16 +1639,16 @@
 
             // 2. Pre-assign and load all HTML5 Audio elements during touch gesture
             try {
-                globalAudioPlayer.src = endSoundSelect.value;
+                globalAudioPlayer.src = resolveAudioSrc(endSoundSelect.value);
                 globalAudioPlayer.load();
 
                 if (intervalSoundSelect.value !== 'none') {
-                    intervalAudioPlayer.src = intervalSoundSelect.value;
+                    intervalAudioPlayer.src = resolveAudioSrc(intervalSoundSelect.value);
                     intervalAudioPlayer.load();
                 }
 
                 if (startSoundSelect.value !== 'none') {
-                    startAudioPlayer.src = startSoundSelect.value;
+                    startAudioPlayer.src = resolveAudioSrc(startSoundSelect.value);
                     startAudioPlayer.load();
                 }
             } catch (e) {
@@ -1912,11 +1912,16 @@
         }
 
         // --- AUDIO PLAYBACK ---
+        function resolveAudioSrc(src) {
+            if (!src || src === 'none') return src;
+            return src.includes('?') ? src : (src + '?v=2');
+        }
+
         function playStartBell() {
             const soundSrc = startSoundSelect.value;
             if (soundSrc && soundSrc !== 'none') {
-                startAudioPlayer.src = soundSrc;
-                startAudioPlayer.volume = 0.9;
+                startAudioPlayer.src = resolveAudioSrc(soundSrc);
+                startAudioPlayer.volume = 1.0;
                 startAudioPlayer.currentTime = 0;
                 startAudioPlayer.play().catch(e => console.log('Start bell error:', e));
             }
@@ -1925,8 +1930,8 @@
         function playIntervalChime() {
             const soundSrc = intervalSoundSelect.value;
             if (soundSrc && soundSrc !== 'none') {
-                intervalAudioPlayer.src = soundSrc;
-                intervalAudioPlayer.volume = 0.85;
+                intervalAudioPlayer.src = resolveAudioSrc(soundSrc);
+                intervalAudioPlayer.volume = 1.0;
                 intervalAudioPlayer.currentTime = 0;
                 intervalAudioPlayer.play().catch(e => console.log('Interval chime error:', e));
             }
@@ -1935,7 +1940,7 @@
         function playEndingBell() {
             const soundSrc = endSoundSelect.value;
             if (soundSrc) {
-                globalAudioPlayer.src = soundSrc;
+                globalAudioPlayer.src = resolveAudioSrc(soundSrc);
                 globalAudioPlayer.loop = autoLoopSoundCheckbox.checked;
                 globalAudioPlayer.volume = 1.0;
                 globalAudioPlayer.currentTime = 0;
@@ -1945,7 +1950,7 @@
 
         function playSpecificSound(src) {
             stopAudio();
-            globalAudioPlayer.src = src;
+            globalAudioPlayer.src = resolveAudioSrc(src);
             globalAudioPlayer.loop = false;
             globalAudioPlayer.volume = 1.0;
             globalAudioPlayer.currentTime = 0;
