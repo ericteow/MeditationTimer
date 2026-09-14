@@ -941,11 +941,11 @@
                     { value: "sounds/01_grand_temple_bell.mp3", text: "Grand Eastern Temple Bell" }
                 ],
                 intervalSoundOptions: [
+                    { value: "none", text: "Disable Interval Chimes" },
                     { value: "sounds/yinqing_01_classic_bronze.mp3", text: "Every 15 min · Classic Yinqing (1 soft strike)" },
                     { value: "sounds/yinqing_03_warm_soft.mp3", text: "Every 15 min · Warm Purple Copper Yinqing" },
                     { value: "sounds/04_healing_432hz_chime.mp3", text: "Every 15 min · 432Hz Healing Chime" },
-                    { value: "sounds/daqing_02_pure_resonant.mp3", text: "Every 15 min · White Bronze Jade Sound" },
-                    { value: "none", text: "Disable Interval Chimes" }
+                    { value: "sounds/daqing_02_pure_resonant.mp3", text: "Every 15 min · White Bronze Jade Sound" }
                 ]
             },
             zh: {
@@ -1078,11 +1078,11 @@
                     { value: "sounds/01_grand_temple_bell.mp3", text: "东方晨钟 (浑厚大钟)" }
                 ],
                 intervalSoundOptions: [
+                    { value: "none", text: "关闭间歇提示音" },
                     { value: "sounds/yinqing_01_classic_bronze.mp3", text: "每15分钟 · 经典引磬 (轻击一声)" },
                     { value: "sounds/yinqing_03_warm_soft.mp3", text: "每15分钟 · 温润紫铜引磬 (柔和一声)" },
                     { value: "sounds/04_healing_432hz_chime.mp3", text: "每15分钟 · 432Hz治愈引磬 (清澈一声)" },
-                    { value: "sounds/daqing_02_pure_resonant.mp3", text: "每15分钟 · 清修白铜玉磬 (澄明一声)" },
-                    { value: "none", text: "关闭间歇提示音" }
+                    { value: "sounds/daqing_02_pure_resonant.mp3", text: "每15分钟 · 清修白铜玉磬 (澄明一声)" }
                 ]
             }
         };
@@ -1277,7 +1277,7 @@
             });
 
             // 3. Interval Sound Select
-            const currentIntervalVal = intervalSoundSelect.value || "sounds/yinqing_01_classic_bronze.mp3";
+            const currentIntervalVal = intervalSoundSelect.value || "none";
             intervalSoundSelect.innerHTML = "";
             t.intervalSoundOptions.forEach(opt => {
                 const option = document.createElement('option');
