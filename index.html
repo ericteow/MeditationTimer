@@ -788,7 +788,7 @@
 
         <!-- 4. SOUND VAULT BUTTON -->
         <button class="sound-vault-toggle" id="toggleVaultBtn">
-            <span>📚</span> <span id="toggleVaultText">Explore Acoustic Sound Vault (20+ Master Tracks)</span>
+            <span>📚</span> <span id="toggleVaultText">Explore Acoustic Sound Vault (35+ Master Tracks)</span>
         </button>
 
         <!-- 5. COLLAPSIBLE SOUND VAULT -->
@@ -849,7 +849,7 @@
                 stopBtn: "Stop",
                 keepScreenLabel: "Keep Screen Awake",
                 autoLoopLabel: "Loop Ending Sound",
-                toggleVaultExpand: "Explore Acoustic Sound Vault (20+ Master Tracks)",
+                toggleVaultExpand: "Explore Acoustic Sound Vault (35+ Master Tracks)",
                 toggleVaultCollapse: "Collapse Acoustic Sound Vault",
                 footerText: "Meditation Timer · Procedural Acoustic Synthesis · 48kHz Master Studio Quality",
                 mediaTitle: "Meditating · Mindfulness Session",
@@ -875,6 +875,26 @@
                             { name: "1. Traditional Zen Temple Yinqing 3 Strikes (1080Hz)", desc: "Authentic monastic ritual strikes (30% → 65% → 100%), solemn and clarifying.", duration: "16s", src: "sounds/yinqing_3strikes_crescendo_classic.mp3" },
                             { name: "2. Crisp & Compact Yinqing 3 Strikes (1200Hz)", desc: "Faster strike intervals, luminous piercing clarity, ideal for waking focus.", duration: "13s", src: "sounds/yinqing_3strikes_crescendo_crisp.mp3" },
                             { name: "3. Warm Copper Yinqing 3 Strikes (852Hz)", desc: "Third-eye chakra soothing frequency, smooth attack, calming and gentle on ears.", duration: "16.5s", src: "sounds/yinqing_3strikes_crescendo_warm.mp3" }
+                        ]
+                    },
+                    {
+                        title: "🔔 5 Yinqing Bells · 3 Volume Dynamics (Soft / Medium / Loud)",
+                        items: [
+                            { name: "1. Classic Zen Yinqing (1080Hz) · Soft", desc: "Gentle strike, tranquil and subtle, ideal for personal quiet meditation.", duration: "9s", src: "sounds/yinqing_01_classic_bronze_small.mp3" },
+                            { name: "1. Classic Zen Yinqing (1080Hz) · Medium", desc: "Standard balanced strike, clear orthodox monastic bronze timbre.", duration: "9s", src: "sounds/yinqing_01_classic_bronze_medium.mp3" },
+                            { name: "1. Classic Zen Yinqing (1080Hz) · Loud", desc: "Crisp resonant strike, solemn and bright, awakening presence.", duration: "9s", src: "sounds/yinqing_01_classic_bronze_loud.mp3" },
+                            { name: "2. Crystalline High Chime (1728Hz) · Soft", desc: "Delicate bright overtone, clearing subtle drowsiness quietly.", duration: "7.5s", src: "sounds/yinqing_02_crystalline_high_small.mp3" },
+                            { name: "2. Crystalline High Chime (1728Hz) · Medium", desc: "Focused high frequency, pierces sluggishness and renews focus.", duration: "7.5s", src: "sounds/yinqing_02_crystalline_high_medium.mp3" },
+                            { name: "2. Crystalline High Chime (1728Hz) · Loud", desc: "Luminous penetrating strike, cutting through deep mental haze instantly.", duration: "7.5s", src: "sounds/yinqing_02_crystalline_high_loud.mp3" },
+                            { name: "3. Warm Copper Yinqing (852Hz) · Soft", desc: "Silky warm felt strike, third-eye calming, zero harshness.", duration: "10s", src: "sounds/yinqing_03_warm_soft_small.mp3" },
+                            { name: "3. Warm Copper Yinqing (852Hz) · Medium", desc: "Balanced mellow strike, rounded and centering for breath awareness.", duration: "10s", src: "sounds/yinqing_03_warm_soft_medium.mp3" },
+                            { name: "3. Warm Copper Yinqing (852Hz) · Loud", desc: "Full warm resonance, soothing the spirit without any ear fatigue.", duration: "10s", src: "sounds/yinqing_03_warm_soft_loud.mp3" },
+                            { name: "4. Ritual Double Chime (Ding-Ding) · Soft", desc: "Two gentle successive strikes, peaceful opening for contemplation.", duration: "10.5s", src: "sounds/yinqing_04_double_strike_small.mp3" },
+                            { name: "4. Ritual Double Chime (Ding-Ding) · Medium", desc: "Orthodox Zen hall double chime, structured session transition.", duration: "10.5s", src: "sounds/yinqing_04_double_strike_medium.mp3" },
+                            { name: "4. Ritual Double Chime (Ding-Ding) · Loud", desc: "Full ritual double strike, clear signals between motion and stillness.", duration: "10.5s", src: "sounds/yinqing_04_double_strike_loud.mp3" },
+                            { name: "5. 528Hz Harmonic DNA Chime · Soft", desc: "Whisper-like 528Hz healing resonance, subtle cellular relaxation.", duration: "11s", src: "sounds/yinqing_05_harmonic_528_small.mp3" },
+                            { name: "528Hz Harmonic DNA Chime · Medium", desc: "Balanced miracle frequency with crystalline octaves, deep inner peace.", duration: "11s", src: "sounds/yinqing_05_harmonic_528_medium.mp3" },
+                            { name: "528Hz Harmonic DNA Chime · Loud", desc: "Expansive multi-octave harmonic wash, uplifting heart and mind.", duration: "11s", src: "sounds/yinqing_05_harmonic_528_loud.mp3" }
                         ]
                     },
                     {
@@ -915,13 +935,23 @@
                         ]
                     },
                     {
-                        group: "🔔 Yinqing Single Strike",
+                        group: "🔔 Yinqing Single Strike · 3 Volumes (Soft / Med / Loud)",
                         options: [
-                            { value: "sounds/yinqing_01_classic_bronze.mp3", text: "Classic Zen Yinqing (1080Hz)" },
-                            { value: "sounds/yinqing_02_crystalline_high.mp3", text: "Crystalline High Chime (1728Hz Focus)" },
-                            { value: "sounds/yinqing_03_warm_soft.mp3", text: "Warm Copper Yinqing (852Hz Third Eye)" },
-                            { value: "sounds/yinqing_04_double_strike.mp3", text: "Monastic Ritual Double Chime (Ding-Ding)" },
-                            { value: "sounds/yinqing_05_harmonic_528.mp3", text: "528Hz Harmonic DNA Chime" }
+                            { value: "sounds/yinqing_01_classic_bronze_small.mp3", text: "1. Classic Zen Yinqing (1080Hz) · Soft" },
+                            { value: "sounds/yinqing_01_classic_bronze_medium.mp3", text: "1. Classic Zen Yinqing (1080Hz) · Medium" },
+                            { value: "sounds/yinqing_01_classic_bronze_loud.mp3", text: "1. Classic Zen Yinqing (1080Hz) · Loud" },
+                            { value: "sounds/yinqing_02_crystalline_high_small.mp3", text: "2. Crystalline High Chime (1728Hz) · Soft" },
+                            { value: "sounds/yinqing_02_crystalline_high_medium.mp3", text: "2. Crystalline High Chime (1728Hz) · Medium" },
+                            { value: "sounds/yinqing_02_crystalline_high_loud.mp3", text: "2. Crystalline High Chime (1728Hz) · Loud" },
+                            { value: "sounds/yinqing_03_warm_soft_small.mp3", text: "3. Warm Copper Yinqing (852Hz) · Soft" },
+                            { value: "sounds/yinqing_03_warm_soft_medium.mp3", text: "3. Warm Copper Yinqing (852Hz) · Medium" },
+                            { value: "sounds/yinqing_03_warm_soft_loud.mp3", text: "3. Warm Copper Yinqing (852Hz) · Loud" },
+                            { value: "sounds/yinqing_04_double_strike_small.mp3", text: "4. Ritual Double Chime · Soft" },
+                            { value: "sounds/yinqing_04_double_strike_medium.mp3", text: "4. Ritual Double Chime · Medium" },
+                            { value: "sounds/yinqing_04_double_strike_loud.mp3", text: "4. Ritual Double Chime · Loud" },
+                            { value: "sounds/yinqing_05_harmonic_528_small.mp3", text: "5. 528Hz Harmonic DNA Chime · Soft" },
+                            { value: "sounds/yinqing_05_harmonic_528_medium.mp3", text: "5. 528Hz Harmonic DNA Chime · Medium" },
+                            { value: "sounds/yinqing_05_harmonic_528_loud.mp3", text: "5. 528Hz Harmonic DNA Chime · Loud" }
                         ]
                     },
                     {
@@ -935,15 +965,20 @@
                 ],
                 startSoundOptions: [
                     { value: "none", text: "None (Silent Start)" },
-                    { value: "sounds/yinqing_01_classic_bronze.mp3", text: "Classic Zen Yinqing (Gentle Start)" },
+                    { value: "sounds/yinqing_01_classic_bronze_small.mp3", text: "Classic Zen Yinqing · Soft (Gentle Start)" },
+                    { value: "sounds/yinqing_01_classic_bronze_medium.mp3", text: "Classic Zen Yinqing · Medium (Balanced Start)" },
+                    { value: "sounds/yinqing_01_classic_bronze_loud.mp3", text: "Classic Zen Yinqing · Loud (Clear Start)" },
                     { value: "sounds/daqing_01_ancient_bronze.mp3", text: "Ancient Bronze Daqing (Solemn Start)" },
-                    { value: "sounds/yinqing_04_double_strike.mp3", text: "Ritual Double Chime (Begin Session)" },
+                    { value: "sounds/yinqing_04_double_strike_medium.mp3", text: "Ritual Double Chime (Begin Session)" },
                     { value: "sounds/01_grand_temple_bell.mp3", text: "Grand Eastern Temple Bell" }
                 ],
                 intervalSoundOptions: [
                     { value: "none", text: "Disable Interval Chimes" },
-                    { value: "sounds/yinqing_01_classic_bronze.mp3", text: "Every 15 min · Classic Yinqing (1 soft strike)" },
-                    { value: "sounds/yinqing_03_warm_soft.mp3", text: "Every 15 min · Warm Purple Copper Yinqing" },
+                    { value: "sounds/yinqing_01_classic_bronze_small.mp3", text: "Every 15 min · Classic Yinqing (Soft · 1 gentle strike)" },
+                    { value: "sounds/yinqing_01_classic_bronze_medium.mp3", text: "Every 15 min · Classic Yinqing (Medium · 1 balanced strike)" },
+                    { value: "sounds/yinqing_01_classic_bronze_loud.mp3", text: "Every 15 min · Classic Yinqing (Loud · 1 clear strike)" },
+                    { value: "sounds/yinqing_03_warm_soft_small.mp3", text: "Every 15 min · Warm Copper Yinqing (Soft)" },
+                    { value: "sounds/yinqing_03_warm_soft_medium.mp3", text: "Every 15 min · Warm Copper Yinqing (Medium)" },
                     { value: "sounds/04_healing_432hz_chime.mp3", text: "Every 15 min · 432Hz Healing Chime" },
                     { value: "sounds/daqing_02_pure_resonant.mp3", text: "Every 15 min · White Bronze Jade Sound" }
                 ]
@@ -986,7 +1021,7 @@
                 stopBtn: "停止",
                 keepScreenLabel: "保持屏幕常亮 (防止息屏)",
                 autoLoopLabel: "出定声循环播放 (直到手动关闭)",
-                toggleVaultExpand: "展开全部禅音品鉴库 (20+ 款原生音效)",
+                toggleVaultExpand: "展开全部禅音品鉴库 (35+ 款原生音效)",
                 toggleVaultCollapse: "收起全部禅音品鉴库",
                 footerText: "禅修计时器 · 专业声学生成 · 48kHz 无损录音室母带品质",
                 mediaTitle: "禅修静坐中 · 冥想计时器",
@@ -1012,6 +1047,26 @@
                             { name: "1. 经典禅门三击 (1080Hz)", desc: "正统寺院引磬起坐仪轨。微扣(30%) → 次扣(65%) → 重扣(100%)，庄严肃穆。", duration: "16s", src: "sounds/yinqing_3strikes_crescendo_classic.mp3" },
                             { name: "2. 紧凑清越三击 (1200Hz)", desc: "敲击间隔更紧凑明快，基音清澈破空，适合短时静坐或快速开静。", duration: "13s", src: "sounds/yinqing_3strikes_crescendo_crisp.mp3" },
                             { name: "3. 温润紫铜三击 (852Hz)", desc: "眉心轮柔和频率，起音圆润，由浅入深慢慢舒展，平复心绪不刺耳。", duration: "16.5s", src: "sounds/yinqing_3strikes_crescendo_warm.mp3" }
+                        ]
+                    },
+                    {
+                        title: "🔔 五款引磬 · 三种声调 (小声 / 中声 / 大声)",
+                        items: [
+                            { name: "1. 经典禅门引磬 (1080Hz) · 小声", desc: "柔和轻敲，微鸣悠远，适合深夜或极安静环境私修。", duration: "9s", src: "sounds/yinqing_01_classic_bronze_small.mp3" },
+                            { name: "1. 经典禅门引磬 (1080Hz) · 中声", desc: "适中力度，正统禅林青铜纯正音质，清雅适宜。", duration: "9s", src: "sounds/yinqing_01_classic_bronze_medium.mp3" },
+                            { name: "1. 经典禅门引磬 (1080Hz) · 大声", desc: "清脆宏响，庄严清越，声透云霄，提振觉照力。", duration: "9s", src: "sounds/yinqing_01_classic_bronze_loud.mp3" },
+                            { name: "2. 破空晶莹高磬 (1728Hz) · 小声", desc: "纤细高频，如晨露微滴，轻柔点醒昏沉。", duration: "7.5s", src: "sounds/yinqing_02_crystalline_high_small.mp3" },
+                            { name: "2. 破空晶莹高磬 (1728Hz) · 中声", desc: "高亢澄澈，穿透杂念，凝神止息，回复清明。", duration: "7.5s", src: "sounds/yinqing_02_crystalline_high_medium.mp3" },
+                            { name: "2. 破空晶莹高磬 (1728Hz) · 大声", desc: "极清极亮，金石破空，瞬间驱散深重昏睡与散乱。", duration: "7.5s", src: "sounds/yinqing_02_crystalline_high_loud.mp3" },
+                            { name: "3. 温润紫铜引磬 (852Hz) · 小声", desc: "温润软槌轻击，眉心轮抚平躁动，柔若无物。", duration: "10s", src: "sounds/yinqing_03_warm_soft_small.mp3" },
+                            { name: "3. 温润紫铜引磬 (852Hz) · 中声", desc: "圆润适中，舒缓平定，气息绵绵，不刺耳。", duration: "10s", src: "sounds/yinqing_03_warm_soft_medium.mp3" },
+                            { name: "3. 温润紫铜引磬 (852Hz) · 大声", desc: "沉静宏阔，紫铜厚质余韵，安详饱满。", duration: "10s", src: "sounds/yinqing_03_warm_soft_loud.mp3" },
+                            { name: "4. 禅堂仪轨连击磬 (叮~叮) · 小声", desc: "双扣轻音，温和唤醒，静谧出定。", duration: "10.5s", src: "sounds/yinqing_04_double_strike_small.mp3" },
+                            { name: "4. 禅堂仪轨连击磬 (叮~叮) · 中声", desc: "标准禅堂二连击，止静开静仪轨，秩序庄严。", duration: "10.5s", src: "sounds/yinqing_04_double_strike_medium.mp3" },
+                            { name: "4. 禅堂仪轨连击磬 (叮~叮) · 大声", desc: "重扣连响，余音回荡，定慧均等，精神振奋。", duration: "10.5s", src: "sounds/yinqing_04_double_strike_loud.mp3" },
+                            { name: "5. 528Hz空灵谐波磬 · 小声", desc: "微风般轻柔528Hz身心共振，细腻舒缓细胞压力。", duration: "11s", src: "sounds/yinqing_05_harmonic_528_small.mp3" },
+                            { name: "5. 528Hz空灵谐波磬 · 中声", desc: "奇迹谐波与八度清磬交织，身心如沐清泉。", duration: "11s", src: "sounds/yinqing_05_harmonic_528_medium.mp3" },
+                            { name: "5. 528Hz空灵谐波磬 · 大声", desc: "宏大谐波泛音共鸣，空灵辽阔，充满喜悦与安宁。", duration: "11s", src: "sounds/yinqing_05_harmonic_528_loud.mp3" }
                         ]
                     },
                     {
@@ -1052,13 +1107,23 @@
                         ]
                     },
                     {
-                        group: "🔔 引磬 单击",
+                        group: "🔔 引磬 单击 · 三种声调 (小声 / 中声 / 大声)",
                         options: [
-                            { value: "sounds/yinqing_01_classic_bronze.mp3", text: "经典禅门引磬 (1080Hz)" },
-                            { value: "sounds/yinqing_02_crystalline_high.mp3", text: "破空晶莹高磬 (1728Hz 破昏沉)" },
-                            { value: "sounds/yinqing_03_warm_soft.mp3", text: "温润紫铜引磬 (852Hz 眉心轮)" },
-                            { value: "sounds/yinqing_04_double_strike.mp3", text: "禅堂仪轨连击磬 (叮~叮)" },
-                            { value: "sounds/yinqing_05_harmonic_528.mp3", text: "528Hz 空灵谐波磬" }
+                            { value: "sounds/yinqing_01_classic_bronze_small.mp3", text: "1. 经典禅门引磬 (1080Hz) · 小声" },
+                            { value: "sounds/yinqing_01_classic_bronze_medium.mp3", text: "1. 经典禅门引磬 (1080Hz) · 中声" },
+                            { value: "sounds/yinqing_01_classic_bronze_loud.mp3", text: "1. 经典禅门引磬 (1080Hz) · 大声" },
+                            { value: "sounds/yinqing_02_crystalline_high_small.mp3", text: "2. 破空晶莹高磬 (1728Hz) · 小声" },
+                            { value: "sounds/yinqing_02_crystalline_high_medium.mp3", text: "2. 破空晶莹高磬 (1728Hz) · 中声" },
+                            { value: "sounds/yinqing_02_crystalline_high_loud.mp3", text: "2. 破空晶莹高磬 (1728Hz) · 大声" },
+                            { value: "sounds/yinqing_03_warm_soft_small.mp3", text: "3. 温润紫铜引磬 (852Hz) · 小声" },
+                            { value: "sounds/yinqing_03_warm_soft_medium.mp3", text: "3. 温润紫铜引磬 (852Hz) · 中声" },
+                            { value: "sounds/yinqing_03_warm_soft_loud.mp3", text: "3. 温润紫铜引磬 (852Hz) · 大声" },
+                            { value: "sounds/yinqing_04_double_strike_small.mp3", text: "4. 禅堂仪轨连击磬 · 小声" },
+                            { value: "sounds/yinqing_04_double_strike_medium.mp3", text: "4. 禅堂仪轨连击磬 · 中声" },
+                            { value: "sounds/yinqing_04_double_strike_loud.mp3", text: "4. 禅堂仪轨连击磬 · 大声" },
+                            { value: "sounds/yinqing_05_harmonic_528_small.mp3", text: "5. 528Hz 空灵谐波磬 · 小声" },
+                            { value: "sounds/yinqing_05_harmonic_528_medium.mp3", text: "5. 528Hz 空灵谐波磬 · 中声" },
+                            { value: "sounds/yinqing_05_harmonic_528_loud.mp3", text: "5. 528Hz 空灵谐波磬 · 大声" }
                         ]
                     },
                     {
@@ -1072,15 +1137,20 @@
                 ],
                 startSoundOptions: [
                     { value: "none", text: "无 (静默开始)" },
-                    { value: "sounds/yinqing_01_classic_bronze.mp3", text: "经典禅门引磬 (轻灵启程)" },
+                    { value: "sounds/yinqing_01_classic_bronze_small.mp3", text: "经典禅门引磬 · 小声 (柔和启程)" },
+                    { value: "sounds/yinqing_01_classic_bronze_medium.mp3", text: "经典禅门引磬 · 中声 (适中启程)" },
+                    { value: "sounds/yinqing_01_classic_bronze_loud.mp3", text: "经典禅门引磬 · 大声 (清脆启程)" },
                     { value: "sounds/daqing_01_ancient_bronze.mp3", text: "禅林古铜大磬 (庄严起坐)" },
-                    { value: "sounds/yinqing_04_double_strike.mp3", text: "仪轨双击磬 (开静止静)" },
+                    { value: "sounds/yinqing_04_double_strike_medium.mp3", text: "仪轨双击磬 (开静止静)" },
                     { value: "sounds/01_grand_temple_bell.mp3", text: "东方晨钟 (浑厚大钟)" }
                 ],
                 intervalSoundOptions: [
                     { value: "none", text: "关闭间歇提示音" },
-                    { value: "sounds/yinqing_01_classic_bronze.mp3", text: "每15分钟 · 经典引磬 (轻击一声)" },
-                    { value: "sounds/yinqing_03_warm_soft.mp3", text: "每15分钟 · 温润紫铜引磬 (柔和一声)" },
+                    { value: "sounds/yinqing_01_classic_bronze_small.mp3", text: "每15分钟 · 经典引磬 (小声 · 轻敲一声)" },
+                    { value: "sounds/yinqing_01_classic_bronze_medium.mp3", text: "每15分钟 · 经典引磬 (中声 · 适中一声)" },
+                    { value: "sounds/yinqing_01_classic_bronze_loud.mp3", text: "每15分钟 · 经典引磬 (大声 · 宏亮一声)" },
+                    { value: "sounds/yinqing_03_warm_soft_small.mp3", text: "每15分钟 · 温润紫铜引磬 (小声)" },
+                    { value: "sounds/yinqing_03_warm_soft_medium.mp3", text: "每15分钟 · 温润紫铜引磬 (中声)" },
                     { value: "sounds/04_healing_432hz_chime.mp3", text: "每15分钟 · 432Hz治愈引磬 (清澈一声)" },
                     { value: "sounds/daqing_02_pure_resonant.mp3", text: "每15分钟 · 清修白铜玉磬 (澄明一声)" }
                 ]
