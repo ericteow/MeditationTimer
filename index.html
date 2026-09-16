@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="zh-CN">
+<html lang="zh-CN" data-theme="light">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
@@ -709,8 +709,8 @@
 <body>
 
     <div class="lang-switch-container">
-        <button class="lang-switch-btn" id="themeSwitchBtn" onclick="toggleTheme()" title="切换为米白浅色模式">
-            <span id="themeSwitchIcon">☀️</span> <span id="themeSwitchText">米白</span>
+        <button class="lang-switch-btn" id="themeSwitchBtn" onclick="toggleTheme()" title="切换为深色模式">
+            <span id="themeSwitchIcon">🌙</span> <span id="themeSwitchText">深色</span>
         </button>
         <button class="lang-switch-btn" id="langSwitchBtn" onclick="toggleLanguage()" title="语言切换 / Language">
             <span>🌐</span> <span id="langSwitchText">English</span>
@@ -731,9 +731,9 @@
                 <svg class="dial-svg" viewBox="0 0 300 300">
                     <defs>
                         <linearGradient id="goldGradient" x1="0%" y1="0%" x2="100%" y2="100%">
-                            <stop id="gradStop1" offset="0%" stop-color="#f5df8b" />
-                            <stop id="gradStop2" offset="50%" stop-color="#d4af37" />
-                            <stop id="gradStop3" offset="100%" stop-color="#9a7b1c" />
+                            <stop id="gradStop1" offset="0%" stop-color="#c99826" />
+                            <stop id="gradStop2" offset="50%" stop-color="#a67c1e" />
+                            <stop id="gradStop3" offset="100%" stop-color="#7d5b12" />
                         </linearGradient>
                     </defs>
                     <circle class="dial-bg" cx="150" cy="150" r="135" />
@@ -1444,10 +1444,11 @@
         progressCircle.style.strokeDashoffset = 0;
 
         // --- THEME ENGINE (DARK ZEN vs LITE 米白) ---
-        let currentTheme = localStorage.getItem('meditation_timer_theme') || 'dark';
+        let currentTheme = localStorage.getItem('meditation_timer_theme_v2') || 'light';
 
         function applyTheme(theme) {
             currentTheme = theme;
+            localStorage.setItem('meditation_timer_theme_v2', theme);
             localStorage.setItem('meditation_timer_theme', theme);
             if (theme === 'light') {
                 document.documentElement.setAttribute('data-theme', 'light');
