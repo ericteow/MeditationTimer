@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Privacy Policy - Sati Timer</title>
+    <style>
+        :root {
+            --bg-color: #0c0f17;
+            --card-bg: #141a24;
+            --text-main: #e6edf3;
+            --text-muted: #8b949e;
+            --gold: #d4af37;
+            --gold-soft: #f1df99;
+            --border-color: #30363d;
+        }
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+            background-color: var(--bg-color);
+            color: var(--text-main);
+            line-height: 1.6;
+            margin: 0;
+            padding: 40px 20px;
+        }
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            background: var(--card-bg);
+            padding: 36px 48px;
+            border-radius: 16px;
+            border: 1px solid var(--border-color);
+            box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+        }
+        h1 {
+            color: var(--gold);
+            font-size: 2rem;
+            margin-top: 0;
+            margin-bottom: 8px;
+        }
+        .meta {
+            color: var(--text-muted);
+            font-size: 0.9rem;
+            margin-bottom: 24px;
+            border-bottom: 1px solid var(--border-color);
+            padding-bottom: 16px;
+        }
+        h2 {
+            color: var(--gold-soft);
+            font-size: 1.3rem;
+            margin-top: 32px;
+            border-left: 3px solid var(--gold);
+            padding-left: 12px;
+        }
+        p, li {
+            color: #c9d1d9;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 20px 0;
+        }
+        th, td {
+            text-align: left;
+            padding: 12px 14px;
+            border: 1px solid var(--border-color);
+        }
+        th {
+            background-color: #1a2230;
+            color: var(--gold-soft);
+        }
+        .badge {
+            display: inline-block;
+            background: #1c2636;
+            color: var(--gold);
+            padding: 4px 10px;
+            border-radius: 6px;
+            font-size: 0.85rem;
+            border: 1px solid rgba(212, 175, 55, 0.4);
+            margin-right: 8px;
+        }
+        code {
+            background: #21262d;
+            padding: 2px 6px;
+            border-radius: 4px;
+            font-size: 0.9em;
+            color: #79c0ff;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Privacy Policy</h1>
+        <div class="meta">
+            <strong>App:</strong> Sati Timer (<code>com.cgteow.meditationtimer</code>)<br>
+            <strong>Effective Date:</strong> September 24, 2026
+        </div>
+
+        <p><strong>Sati Timer</strong> is developed as a privacy-respecting, offline-first meditation timer application for Android. We believe that meditation and mindfulness practice should be completely private, peaceful, and distraction-free.</p>
+
+        <p>This Privacy Policy explains how information is handled when you use Sati Timer.</p>
+
+        <h2>1. Summary: Our Core Privacy Commitment</h2>
+        <ul>
+            <li><span class="badge">No Data Collected</span> We do not collect, transmit, store on external servers, sell, or share any personal information.</li>
+            <li><span class="badge">100% Offline</span> Sati Timer operates entirely on your local device. The app does not request or require network access (<code>android.permission.INTERNET</code> is not requested).</li>
+            <li><span class="badge">No Accounts</span> You do not need to register, log in, or provide personal details to use any feature of the app.</li>
+            <li><span class="badge">Zero Trackers</span> No advertising networks (e.g. AdMob), analytics (e.g. Firebase), or tracking SDKs are embedded in the app.</li>
+        </ul>
+
+        <h2>2. Information Stored Locally on Your Device</h2>
+        <p>All data created during your use of Sati Timer remains exclusively on your local device:</p>
+        <ul>
+            <li><strong>Meditation Session History:</strong> Completed sit logs (date, duration, and chosen sound) are saved to a local SQLite database using Android Room.</li>
+            <li><strong>User Preferences:</strong> Timer duration presets, theme choices (Zen Obsidian / Zen Jade), sound preferences, and language selection are saved in Android Preferences DataStore.</li>
+            <li><strong>Local Backup &amp; Restore:</strong> You can export and import your practice history via standard JSON files using Android's Storage Access Framework. This file is stored strictly on your local device where you choose to place it.</li>
+        </ul>
+
+        <h2>3. Device Permissions and How They Are Used</h2>
+        <table>
+            <thead>
+                <tr>
+                    <th>Permission</th>
+                    <th>Purpose</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td><code>FOREGROUND_SERVICE</code> &amp;<br><code>FOREGROUND_SERVICE_MEDIA_PLAYBACK</code></td>
+                    <td>Allows the meditation countdown timer and acoustic bell sounds to play continuously and reliably when your screen is locked or when switching apps.</td>
+                </tr>
+                <tr>
+                    <td><code>POST_NOTIFICATIONS</code></td>
+                    <td>Displays an active countdown status notification while a meditation sit is running, allowing you to view remaining time and pause or stop the session.</td>
+                </tr>
+                <tr>
+                    <td><code>VIBRATE</code></td>
+                    <td>Enables subtle haptic patterns when interval chimes or completion bells sound for silent practice.</td>
+                </tr>
+                <tr>
+                    <td><code>WAKE_LOCK</code></td>
+                    <td>Keeps the screen gently awake during meditation only if you explicitly enable the "Keep Screen Awake" setting in the app.</td>
+                </tr>
+            </tbody>
+        </table>
+
+        <h2>4. Data Deletion and User Control</h2>
+        <p>You have permanent and complete control over all data stored by Sati Timer:</p>
+        <ul>
+            <li><strong>Individual Deletion:</strong> You can delete any individual session from the History screen.</li>
+            <li><strong>Complete Reset:</strong> You can clear all practice history or reset all settings to defaults at any time in the Settings menu.</li>
+            <li><strong>App Uninstall:</strong> Uninstalling Sati Timer immediately and permanently erases all local database records and settings from your device.</li>
+        </ul>
+
+        <h2>5. Children's Privacy</h2>
+        <p>Because Sati Timer is 100% offline and collects no personal data from any user, it does not collect information from children under 13 and complies fully with COPPA and GDPR.</p>
+
+        <h2>6. Contact Us</h2>
+        <p>If you have any questions or feedback regarding this Privacy Policy, please contact the developer via Google Play Console developer support or repository issue tracker.</p>
+    </div>
+</body>
+</html>
